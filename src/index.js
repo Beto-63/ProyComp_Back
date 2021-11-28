@@ -11,7 +11,6 @@ const UserRouter = require('./routers/userRouter');
 const ConnDb = require('./database/ConnDb');
 const User_requestRouter = require('./routers/user_requestRouter');
 
-
 class Server {
 
     constructor() {
