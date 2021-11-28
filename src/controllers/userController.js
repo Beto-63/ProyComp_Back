@@ -26,7 +26,7 @@ class UserController {
         })
     }
 
-    creteUser(req, res) {
+    createUser(req, res) {
         let objUser = req.body;
         if (objUser.nombre && objUser.apellido) {
             User.create(objUser, (error, data) => {

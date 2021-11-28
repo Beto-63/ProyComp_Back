@@ -8,7 +8,8 @@ const userSchema = Schema({
         type: String
     },
     user_cat: {
-        type: String
+        type: String,
+        enum: ['clerk', 'admin']
     },
 }, { collection: 'user' });
 

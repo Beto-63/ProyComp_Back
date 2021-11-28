@@ -14,7 +14,7 @@ class UserRouter {
         this.router.get('/users', objUserC.getAllUsers);
         this.router.get('/users/apellido/:apellido', objUserC.getUserByLastname);
         this.router.get('/users/:id', objUserC.getUserById);
-        this.router.post('/users', objUserC.creteUser);
+        this.router.post('/users', objUserC.createUser);
         this.router.put('/users/:id', objUserC.updeteUser);
         this.router.delete('/users', objUserC.deleteUser);
     }
