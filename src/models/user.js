@@ -7,6 +7,9 @@ const userSchema = Schema({
     email: {
         type: String
     },
+    password: {
+        type: "string"
+    },
     user_cat: {
         type: String,
         enum: ['clerk', 'admin']
