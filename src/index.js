@@ -1,14 +1,15 @@
 //Configurar variables de entorno
 require('dotenv').config();
+//*************Las Claves del .env deben guardarse y poner en git ignore */
 // Importar Dependencias
 const express = require('express');
 const morgan = require('morgan')
 const cors = require('cors');
 //Importar Modulos y Clases : Rutas y Clase de Conexion
 const IndexRouter = require('./routers/indexRouter');
-const UsuarioRouter = require('./routers/usuarioRouter');
-const User_requestRouter = require('./routers/user_requestRouter');
+const UsuarioRouter = require('./routers/userRouter');
 const ConnDb = require('./database/ConnDb');
+const User_requestRouter = require('./routers/user_requestRouter');
 
 
 class Server {

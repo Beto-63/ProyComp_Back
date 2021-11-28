@@ -1,10 +1,10 @@
-const Usuario = require('../models/usuarios');
+const User = require('../models/user');
 const jwt = require('jsonwebtoken');
 
-class UsuarioController {
+class UserController {
 
-    obtenerTodoLosUsuarios(req, res) {
-        Usuario.find((error, data) => {
+    getAllUsers(req, res) {
+        User.find((error, data) => {
             if (error) {
                 res.status(500).send();
             } else {
@@ -15,9 +15,9 @@ class UsuarioController {
 
     }
 
-    obtenerUsuario(req, res) {
+    getUserById(req, res) {
         let id = req.params.id;
-        Usuario.findById(id, (error, data) => {
+        User.findById(id, (error, data) => {
             if (error) {
                 res.status(500).send();
             } else {
@@ -26,10 +26,10 @@ class UsuarioController {
         })
     }
 
-    crearUsuario(req, res) {
-        let objUsuario = req.body;
-        if (objUsuario.nombre && objUsuario.apellido) {
-            Usuario.create(objUsuario, (error, data) => {
+    creteUser(req, res) {
+        let objUser = req.body;
+        if (objUser.nombre && objUser.apellido) {
+            User.create(objUser, (error, data) => {
                 if (error) {
                     res.status(500).send();
                 } else {
@@ -42,10 +42,10 @@ class UsuarioController {
 
     }
 
-    actualizarUsuario(req, res) {
+    updeteUser(req, res) {
         //let {id, nombre, apellido} = req.body;
         let id = req.params.id;
-        Usuario.findByIdAndUpdate(id, req.body, (error, data) => {
+        User.findByIdAndUpdate(id, req.body, (error, data) => {
             if (error) {
                 res.status(500).send();
             } else {
@@ -54,10 +54,10 @@ class UsuarioController {
         });
     }
 
-    eliminarUsuario(req, res) {
+    deleteUser(req, res) {
         let { id } = req.body;
         if (id != null && id != undefined && id != "") {
-            Usuario.findByIdAndRemove(id, (error, data) => {
+            User.findByIdAndRemove(id, (error, data) => {
                 if (error) {
                     res.status(500).send();
                 } else {
@@ -69,9 +69,9 @@ class UsuarioController {
         }
     }
 
-    buscarPorApellido(req, res) {
+    getUserByLastname(req, res) {
         let apellido = req.params.apellido;
-        Usuario.find({ apellido }, (error, data) => {
+        User.find({ apellido }, (error, data) => {
             if (error) {
                 res.status(500).send();
             } else {
@@ -80,10 +80,10 @@ class UsuarioController {
         });
     }
 
-    generarToken(req, res) {
+    generateToken(req, res) {
         let token = jwt.sign({ nombre: "andres" }, "misionticUPBColombia");
         res.status(200).json({ token });
     }
 }
 
-module.exports = UsuarioController;
+module.exports = UserController;

@@ -1,0 +1,4 @@
+Manejo de User request en rutas
+    1. this.router.get('/user_request', objUser_requestC.getAllUser_requests);
+    2. this.router.post('/user_request', objUser_requestC.createUser_request);
+    3. this.router.delete('/user_request', objUser_requestC.deleteUser_request);

@@ -53,38 +53,38 @@ class User_requestController {
                 }
             });
         }
-    
-        eliminarUsuario(req, res) {
-            let { id } = req.body;
-            if (id != null && id != undefined && id != "") {
-                Usuario.findByIdAndRemove(id, (error, data) => {
-                    if (error) {
-                        res.status(500).send();
-                    } else {
-                        res.status(200).json(data);
-                    }
-                });
-            } else {
-                res.status(400).send();
-            }
-        }
-    
-        buscarPorApellido(req, res) {
-            let apellido = req.params.apellido;
-            Usuario.find({ apellido }, (error, data) => {
+*/
+    deleteUser_request(req, res) {
+        let { id } = req.body;
+        if (id != null && id != undefined && id != "") {
+            User_request.findByIdAndRemove(id, (error, data) => {
                 if (error) {
                     res.status(500).send();
                 } else {
                     res.status(200).json(data);
                 }
             });
+        } else {
+            res.status(400).send();
         }
-    
-        generarToken(req, res) {
-            let token = jwt.sign({ nombre: "andres" }, "misionticUPBColombia");
-            res.status(200).json({ token });
-        }
-    */
+    }
+    /*    
+            buscarPorApellido(req, res) {
+                let apellido = req.params.apellido;
+                Usuario.find({ apellido }, (error, data) => {
+                    if (error) {
+                        res.status(500).send();
+                    } else {
+                        res.status(200).json(data);
+                    }
+                });
+            }
+        
+            generarToken(req, res) {
+                let token = jwt.sign({ nombre: "andres" }, "misionticUPBColombia");
+                res.status(200).json({ token });
+            }
+        */
 }
 
 module.exports = User_requestController;

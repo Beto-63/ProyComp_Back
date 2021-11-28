@@ -7,7 +7,7 @@ class User_requestRouter {
         this.#config();
     }
     #config() {
-        //Crear objeto UsuarioController
+        //Crear objeto User_requestC
         const objUser_requestC = new User_requestController();
         //Crear rutas
         this.router.get('/user_request', objUser_requestC.getAllUser_requests);
@@ -15,7 +15,7 @@ class User_requestRouter {
         //this.router.get('/usuarios/:id', objUsuarioC.obtenerUsuario);
         this.router.post('/user_request', objUser_requestC.createUser_request);
         //this.router.put('/usuarios/:id', objUsuarioC.actualizarUsuario);   
-        //this.router.delete('/usuarios', objUsuarioC.eliminarUsuario);
+        this.router.delete('/user_request', objUser_requestC.deleteUser_request);
     }
 
 }
