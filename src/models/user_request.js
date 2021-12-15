@@ -1,19 +1,7 @@
-const { Schema, model } = require('mongoose');
+Este archivo debe ser borrado
 
-const user_requestSchema = Schema({
-    nick: {
-        type: String
-    },
-    email: {
-        type: String
-    },
-    password: {
-        type: "string"
-    },
-    user_cat: {
-        type: String
-    },
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++
 
-}, { collection: 'user_request' });
+Ya fue eliminada la coleccion de la base de datos del Proyecto  
 
-module.exports = model('User_request', user_requestSchema);
++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
