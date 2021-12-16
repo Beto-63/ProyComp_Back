@@ -2,7 +2,7 @@
 const jwt = require('jsonwebtoken');
 //Importar Modulos
 const User = require('../models/user');
-const User_request = require('../models/user_request');
+
 const { PRIVATE_KEY, TokenController } = require('./tokenController');
 
 class UserController {
