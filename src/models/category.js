@@ -7,3 +7,16 @@ const categorySchema = Schema({
 }, { collection: 'category' });
 
 module.exports = model('Category', categorySchema);
+
+/* ++++++++++++++++++++++++++++++++++++++++++++++++++
+Las categorias de producto sirven para seleccionar dentro del
+Catalogo de productos
+Actualmente se considera deben ser:
+Caliente
+Frio
+Paquete
+Accesorio
+Combo
+Ya quedan creadas en Mongo para el  proyecto (no para produccion)  
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
