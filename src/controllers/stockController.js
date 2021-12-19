@@ -16,7 +16,7 @@
 
 
 //Importar Modulos
-const StockItem = require('../models/stockItem');
+const StockItem = require('../models/stock_item');
 
 
 
