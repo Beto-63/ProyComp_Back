@@ -16,6 +16,7 @@ class ProductRouter {
         const objProductC = new ProductController();
         //Crear rutas
         this.router.post('/product', objProductC.createProduct);
+        this.router.put('/product', objProductC.adjustProduct);
     };
 };
 

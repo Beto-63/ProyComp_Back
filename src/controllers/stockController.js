@@ -43,7 +43,7 @@ class StockController {
     getAllItems = (req, res) => {
         //let decode = jwt.decode(this.objTokenC.getToken(req), PRIVATE_KEY);  // este decode.id me provee el id para verificarw si es un 'admin'
         let decode = true;    //borrar al activar seguridad
-        //Insertar/crear el Stock Item en la BD
+        //recuperar la lista de todos los Stock Item en la BD
         if (decode) {
             StockItem.find((error, data) => {
                 if (error) {
@@ -61,7 +61,7 @@ class StockController {
         let id = req.params.id;
         //let decode = jwt.decode(this.objTokenC.getToken(req), PRIVATE_KEY);  // este decode.id me provee el id para verificarw si es un 'admin'
         let decode = true;    //borrar al activar seguridad
-        //Insertar/crear el Stock Item en la BD
+        //recupera todos los items con el Id especificado en todas las ubicaciones en la BD
         if (decode) {
             StockItem.findById(id, (error, data) => {
                 if (error) {
@@ -79,7 +79,7 @@ class StockController {
         let { id, channel } = req.body;
         //let decode = jwt.decode(this.objTokenC.getToken(req), PRIVATE_KEY);  // este decode.id me provee el id para verificarw si es un 'admin'
         let decode = true;    //borrar al activar seguridad
-        //Insertar/crear el Stock Item en la BD
+        //retona el Stock Item que conicida Id y en una especifica ubicacion en la BD
         if (decode) {
             StockItem.find({ id, channel }, (error, data) => {
                 if (error) {
@@ -97,7 +97,7 @@ class StockController {
         let { id, channel, qty } = req.body;
         //let decode = jwt.decode(this.objTokenC.getToken(req), PRIVATE_KEY);  // este decode.id me provee el id para verificarw si es un 'admin'
         let decode = true;    //borrar al activar seguridad
-        //Insertar/crear el Stock Item en la BD
+        //Adicionaal Stock Item la cantidad especificada para una ubicacion en particular en la BD
         if (decode) {
             StockItem.find({ id, channel }, (error, data) => {
                 if (error) {
@@ -124,7 +124,7 @@ class StockController {
         let { id, channel } = req.body;
         //let decode = jwt.decode(this.objTokenC.getToken(req), PRIVATE_KEY);  // este decode.id me provee el id para verificarw si es un 'admin'
         let decode = true;    //borrar al activar seguridad
-        //Insertar/crear el Stock Item en la BD
+        //Ajusta cualquier atributo del Stock Item: status, nombre, ubicacion
         if (decode) {
             StockItem.findOneAndUpdate({ id, channel }, req.body, (error, data) => {
                 if (error) {
