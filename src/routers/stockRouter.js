@@ -1,4 +1,5 @@
 const express = require('express');
+const StockController = require("../controllers/stockController")
 
 class StockRouter {
     constructor() {
@@ -7,10 +8,10 @@ class StockRouter {
     }
 
     #config() {
-        const objStockC = new UserController();
+        const objStockC = new StockController();
         //Crear rutas
-        this.router.get('/stock', objStockC.getAllItems);
+        this.router.post('/stock', objStockC.createItem);
     };
-}
+};
 
 module.exports = StockRouter;

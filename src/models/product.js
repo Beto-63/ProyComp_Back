@@ -4,6 +4,9 @@ const productSchema = Schema({
     name: {
         type: String
     },
+    description: {
+        type: String
+    },
     price: {
         type: Number
     },
@@ -13,10 +16,10 @@ const productSchema = Schema({
     img_url: {
         type: String
     },
-    ingredient_id: {
+    stock_id: {
         type: String
     },
-    ingredient_qty: {
+    stock_qty: {
         type: Number
     },
     status: {

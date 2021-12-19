@@ -13,6 +13,8 @@ const ConnDb = require('./database/ConnDb');
 //Importar Modulos y Clases : Rutas y Clase de Conexion
 const IndexRouter = require('./routers/indexRouter');
 const UserRouter = require('./routers/userRouter');
+const StockRouter = require('./routers/stockRouter');
+const ProductRouter = require('./routers/productRouter');
 
 
 class Server {
@@ -36,7 +38,7 @@ class Server {
 
         // Para cuando me envien una petición POST desde un formulario, 
         // pueda entender los campos que vienen desde allí
-        this.app.use(express.urlencoded({extended: false})); 
+        this.app.use(express.urlencoded({ extended: false }));
 
         //Indicar al servidor que procesará datos en formato JSON durante las peticiones http
         this.app.use(express.json());
@@ -53,10 +55,14 @@ class Server {
         //------------Crear rutas----------
         let indexR = new IndexRouter();
         let userR = new UserRouter();
-        
+        let stockR = new StockRouter();
+        let productR = new ProductRouter();
+
         //-----------Añadir ruta a express----------
         this.app.use(indexR.router);
         this.app.use(userR.router);
+        this.app.use(stockR.router);
+        this.app.use(productR.router);
 
         //Poner a la escucha el servidor
         this.app.listen(this.app.get('PORT'), () => {

@@ -1,6 +1,6 @@
 const { Schema, model } = require('mongoose');
 
-const ingredient_stockSchema = Schema({
+const stock_itemSchema = Schema({
     name: {
         type: String
     },
@@ -16,9 +16,9 @@ const ingredient_stockSchema = Schema({
     }
 
 
-}, { collection: 'ingredient_stock' });
+}, { collection: 'stock_item' });
 
-module.exports = model('Ingredient_stock', ingredient_stockSchema);
+module.exports = model('stock_item', stock_itemSchema);
 
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++
 Esta tabla pretende mantener los inventarios de cada producto (no preprarado)
