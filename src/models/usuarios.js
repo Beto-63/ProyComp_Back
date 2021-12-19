@@ -1,4 +1,4 @@
-const {Schema, model} = require('mongoose');
+const { Schema, model } = require('mongoose');
 
 const usuarioSchema = Schema({
     nombre: {
@@ -7,6 +7,8 @@ const usuarioSchema = Schema({
     apellido: {
         type: String
     }
-}, {collection: 'usuarios'});
+}, { collection: 'usuarios' });
 
 module.exports = model('Usuario', usuarioSchema);
+
+//Sobra esta colleccion?????????????

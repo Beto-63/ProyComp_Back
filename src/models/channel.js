@@ -3,6 +3,10 @@ const { Schema, model } = require('mongoose');
 const channelSchema = Schema({
     name: {
         type: String
+    },
+    status: {
+        type: Number,
+        enum: [0, 1]
     }
 }, { collection: 'channel' });
 

@@ -3,6 +3,10 @@ const { Schema, model } = require('mongoose');
 const categorySchema = Schema({
     name: {
         type: String
+    },
+    status: {
+        type: Number,
+        enum: [0, 1]
     }
 }, { collection: 'category' });
 

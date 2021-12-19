@@ -14,6 +14,10 @@ const userSchema = Schema({
         type: String,
         enum: ['clerk', 'admin']
     },
+    status: {
+        type: Number,
+        enum: [0, 1]
+    }
 }, { collection: 'user' });
 
 module.exports = model('User', userSchema);
