@@ -1,14 +1,14 @@
 /**
  * Funciones requeridas:
- * 1. Ceracion de Stock Items                                   Probado
- * 2. Adicionde cantidad a stock (cantidad y unicacion)         pend
- * 3. Consulta de todosd los stock items                        In Progress sin ruta
- * 4. Consulta del stock item por id (todas las ubicaciones)    Pend
- * 5. Consulta de stock Item por id y por channel (ubicacion)   Pend
+ * 1. Ceracion de Stock Items                                   Probado     createItem
+ * 2. Adicionde cantidad a stock (cantidad y ubicacion)         In Progress addQty
+ * 3. Consulta de todosd los stock items                        In Progress getAllItems
+ * 4. Consulta del stock item por id (todas las ubicaciones)    In Progress getItemById
+ * 5. Consulta de stock Item por id y por channel (ubicacion)   In Progress getItemByChannelId
  * 6. Traslado de cantidad de un stock item entre ubicaciones   Pend
  * 7. Consumo de Inventario (en linea / por venta)              Pend
- * 8. Ajuste de Inventario (por impresicion en la preparacion)  Pend
- * 9. Ajuste de Item (nombre, estado)                           Pend
+ * 8. Ajuste de Inventario (por impresicion en la preparacion)  In Progress adjustItem
+ * 9. Ajuste de Item (nombre, estado)                           In Progress adjustItem
  */
 
 
@@ -46,6 +46,87 @@ class StockController {
         //Insertar/crear el Stock Item en la BD
         if (decode) {
             StockItem.find((error, data) => {
+                if (error) {
+                    res.status(500).json({ info: error });
+                } else {
+                    res.status(201).json(data);
+                }
+            })
+        } else {
+            res.status(500).json({ info: 'Operacion No autorizada' });
+        };
+    }
+
+    getItemById = (req, res) => {
+        let id = req.params.id;
+        //let decode = jwt.decode(this.objTokenC.getToken(req), PRIVATE_KEY);  // este decode.id me provee el id para verificarw si es un 'admin'
+        let decode = true;    //borrar al activar seguridad
+        //Insertar/crear el Stock Item en la BD
+        if (decode) {
+            StockItem.findById(id, (error, data) => {
+                if (error) {
+                    res.status(500).json({ info: error });
+                } else {
+                    res.status(201).json(data);
+                }
+            })
+        } else {
+            res.status(500).json({ info: 'Operacion No autorizada' });
+        };
+    }
+
+    getItemByChannelId = (req, res) => {
+        let { id, channel } = req.body;
+        //let decode = jwt.decode(this.objTokenC.getToken(req), PRIVATE_KEY);  // este decode.id me provee el id para verificarw si es un 'admin'
+        let decode = true;    //borrar al activar seguridad
+        //Insertar/crear el Stock Item en la BD
+        if (decode) {
+            StockItem.find({ id, channel }, (error, data) => {
+                if (error) {
+                    res.status(500).json({ info: error });
+                } else {
+                    res.status(201).json(data);
+                }
+            })
+        } else {
+            res.status(500).json({ info: 'Operacion No autorizada' });
+        };
+    }
+
+    addQty = (req, res) => {
+        let { id, channel, qty } = req.body;
+        //let decode = jwt.decode(this.objTokenC.getToken(req), PRIVATE_KEY);  // este decode.id me provee el id para verificarw si es un 'admin'
+        let decode = true;    //borrar al activar seguridad
+        //Insertar/crear el Stock Item en la BD
+        if (decode) {
+            StockItem.find({ id, channel }, (error, data) => {
+                if (error) {
+                    res.status(500).json({ infoFind: error });
+                } else {
+                    data.qty = + qty
+                    StockItem.findByIdAndUpdate(id, data, (err, out) => {
+                        if (err) {
+                            res.status(500).json({ infoUpdate: err })
+                        } else {
+                            res.status(201).json(out);
+                        }
+                    }
+                    )
+
+                }
+            })
+        } else {
+            res.status(500).json({ info: 'Operacion No autorizada' });
+        };
+    }
+
+    adjustItem = (req, res) => {
+        let { id, channel } = req.body;
+        //let decode = jwt.decode(this.objTokenC.getToken(req), PRIVATE_KEY);  // este decode.id me provee el id para verificarw si es un 'admin'
+        let decode = true;    //borrar al activar seguridad
+        //Insertar/crear el Stock Item en la BD
+        if (decode) {
+            StockItem.findOneAndUpdate({ id, channel }, req.body, (error, data) => {
                 if (error) {
                     res.status(500).json({ info: error });
                 } else {
