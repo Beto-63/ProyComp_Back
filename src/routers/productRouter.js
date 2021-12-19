@@ -1,5 +1,5 @@
 //Importar dependencias
-const express = require('express');
+const { Router } = require('express');
 
 //Importar modulos
 const ProductController = require('../controllers/productController');
@@ -8,7 +8,7 @@ const ProductController = require('../controllers/productController');
 
 class ProductRouter {
     constructor() {
-        this.router = express.Router();
+        this.router = Router();
         this.#config();
     }
 
@@ -19,4 +19,4 @@ class ProductRouter {
     };
 };
 
-module.exports = ProductController;
+module.exports = ProductRouter;

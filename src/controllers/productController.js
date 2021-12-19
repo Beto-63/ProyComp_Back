@@ -1,6 +1,6 @@
 /**
  * Funciones requeridas
- * 1. Ceracion de productos             In Progress sin ruta
+ * 1. Ceracion de productos            Probado
  * 2. Modificacion de Productos 
  */
 
@@ -23,8 +23,8 @@ class ProductController {
             });
         } else {
             res.status(500).json({ info: 'Operacion No Autorizada' });
-        }
-    }
+        };
+    };
 };
 
 module.exports = ProductController
