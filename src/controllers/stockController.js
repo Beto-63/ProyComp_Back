@@ -1,10 +1,10 @@
 /**
  * Funciones requeridas:
  * 1. Ceracion de Stock Items                                   Probado     createItem
- * 2. Adicionde cantidad a stock (cantidad y ubicacion)         In Progress addQty
- * 3. Consulta de todosd los stock items                        In Progress getAllItems
- * 4. Consulta del stock item por id (todas las ubicaciones)    In Progress getItemById
- * 5. Consulta de stock Item por id y por channel (ubicacion)   In Progress getItemByChannelId
+ * 2. Adicionde cantidad a stock (cantidad y ubicacion)         Probado     addQty
+ * 3. Consulta de todod los stock items                         Probado     getAllItems 
+ * 4. Consulta del stockItem por Nombre (todas las ubicaciones)In Progress  getItemById         Falla
+ * 5. Consulta de stock Item por id y por channel (ubicacion)   In Progress getItemByChannelId  Tengo problema de conceptualizacion id es unico 
  * 6. Traslado de cantidad de un stock item entre ubicaciones   Pend
  * 7. Consumo de Inventario (en linea / por venta)              Pend
  * 8. Ajuste de Inventario (por impresicion en la preparacion)  In Progress adjustItem
@@ -57,13 +57,14 @@ class StockController {
         };
     }
 
-    getItemById = (req, res) => {
-        let id = req.params.id;
+    getItemByName = (req, res) => {
+        let nameb = req.params.name;
+        console.log("name", nameb);
         //let decode = jwt.decode(this.objTokenC.getToken(req), PRIVATE_KEY);  // este decode.id me provee el id para verificarw si es un 'admin'
         let decode = true;    //borrar al activar seguridad
         //recupera todos los items con el Id especificado en todas las ubicaciones en la BD
         if (decode) {
-            StockItem.findById(id, (error, data) => {
+            StockItem.find({ name: nameb }, (error, data) => {
                 if (error) {
                     res.status(500).json({ info: error });
                 } else {
@@ -99,16 +100,20 @@ class StockController {
         let decode = true;    //borrar al activar seguridad
         //Adicionaal Stock Item la cantidad especificada para una ubicacion en particular en la BD
         if (decode) {
-            StockItem.find({ id, channel }, (error, data) => {
+            StockItem.findOne({ id, channel }, (error, data) => {
                 if (error) {
                     res.status(500).json({ infoFind: error });
                 } else {
-                    data.qty = + qty
+                    console.log("data", data);
+                    console.log("cantidad inicial", data.qty),
+                        console.log("adicionar", qty);
+                    data.quantity = data.quantity + qty;
+                    console.log("sumado", data.quantity);
                     StockItem.findByIdAndUpdate(id, data, (err, out) => {
                         if (err) {
                             res.status(500).json({ infoUpdate: err })
                         } else {
-                            res.status(201).json(out);
+                            res.status(201).json({ Resultado: "Exitoso", Habia: out.quantity, Quedaron: (out.quantity + qty) });
                         }
                     }
                     )
