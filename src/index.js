@@ -10,10 +10,16 @@ const morgan = require('morgan');
 //Importar la conexión de la DB
 const ConnDb = require('./database/ConnDb');
 
+// Libs
+const { createRoles } = require('./libs/initialSetup');
+createRoles();
+
 //Importar Modulos y Clases : Rutas y Clase de Conexion
+const AuthRouter = require('./routers/auth.Routes');
 const IndexRouter = require('./routers/indexRouter');
 const UserRouter = require('./routers/userRouter');
 
+const TestRouter = require('./routers/test.Routes');
 
 class Server {
 
@@ -51,12 +57,18 @@ class Server {
         this.app.set('PORT', process.env.PORT || 3000);
 
         //------------Crear rutas----------
+        let authR = new AuthRouter();
         let indexR = new IndexRouter();
         let userR = new UserRouter();
         
+        let testR = new TestRouter();
+
         //-----------Añadir ruta a express----------
+        this.app.use(authR.router);
         this.app.use(indexR.router);
         this.app.use(userR.router);
+
+        this.app.use(testR.router);
 
         //Poner a la escucha el servidor
         this.app.listen(this.app.get('PORT'), () => {
