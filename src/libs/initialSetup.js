@@ -1,6 +1,6 @@
-const user_catModel = require('../models/user_cat.model');
+const user_catModel = require('../models/user_catModel');
 
-module.exports = async function createRoles() {
+const createRoles = async function createRoles() {
 
     const count = await user_catModel.estimatedDocumentCount();
     //console.log(count);
@@ -37,4 +37,9 @@ module.exports = async function createRoles() {
 
     }
 
+}
+
+module.exports = {
+    createRoles,
+    //
 }
