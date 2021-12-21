@@ -1,7 +1,9 @@
 /**
  * Funciones requeridas
- * 1. Ceracion de productos            Probado
- * 2. Modificacion de Productos        In Progress
+ * 1. Ceracion de productos                             Probado
+ * 2. listar productos por categoria                    Probado
+ * 3. listar productos por categoria y temperatura      Probado
+ * 4. Modificacion de Productos                         Probado
  */
 
 // Importar Modulos
@@ -9,39 +11,55 @@ const Product = require('../models/product');
 
 class ProductController {
     createProduct = (req, res) => {
-        let { name, description, price, cat_id, img_url, stock_id, stock_qty, status } = req.body;
-        //let decode = jwt.decode(this.objTokenC.getToken(req), PRIVATE_KEY);  // este decode.id me provee el id para verificarw si es un 'admin'
-        let decode = true  //borrar al activar seguridad
+        let { name, description, price, cat_name, temperature, img_url, stock_name, stock_qty, status } = req.body;
         //Insertar/crear el producto para venta en la BD
-        if (decode) {
-            Product.create({ name, description, price, cat_id, img_url, stock_id, stock_qty, status }, (error, data) => {
-                if (error) {
-                    res.status(500).json({ info: error });
-                } else {
-                    res.status(200).json(data);
-                }
-            });
-        } else {
-            res.status(500).json({ info: 'Operacion No Autorizada' });
-        };
+        Product.create({ name, description, price, cat_name, temperature, img_url, stock_name, stock_qty, status }, (error, data) => {
+            if (error) {
+                res.status(500).json({ info: error });
+            } else {
+                res.status(200).json(data);
+            }
+        });
+
     };
 
     adjustProduct = (req, res) => {
         let { id } = req.body;
-        //let decode = jwt.decode(this.objTokenC.getToken(req), PRIVATE_KEY);  // este decode.id me provee el id para verificarw si es un 'admin'
-        let decode = true  //borrar al activar seguridad
         //Ajustar/crear el producto para venta en la BD
-        if (decode) {
-            Product.findByIdAndUpdate(id, req.body, (error, data) => {
-                if (error) {
-                    res.status(500).json({ info: error });
-                } else {
-                    res.status(200).json(data);
-                }
-            });
-        } else {
-            res.status(500).json({ info: 'Operacion No Autorizada' });
-        };
+        Product.findByIdAndUpdate(id, req.body, (error, data) => {
+            if (error) {
+                res.status(500).json({ info: error });
+            } else {
+                res.status(200).json(data);
+            }
+        });
+    };
+
+    selectByCategory = (req, res) => {
+        let { cat_name } = req.body;
+        //busca todos los productos de una categoria 
+        Product.find({ cat_name: cat_name }, (error, data) => {
+            if (error) {
+                res.status(500).json({ info: error });
+            } else {
+                res.status(200).json(data);
+            }
+        });
+
+    };
+
+    selectByCatAndTemp = (req, res) => {
+        let { cat_name, temperature } = req.body;
+        console.log(cat_name, temperature)
+        //busca todos los productos de una categoria y una temperatura 
+        Product.find({ cat_name: cat_name, temperature: temperature }, (error, data) => {
+            if (error) {
+                res.status(500).json({ info: error });
+            } else {
+                res.status(200).json(data);
+            }
+        });
+
     };
 };
 

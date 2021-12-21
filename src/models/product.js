@@ -10,13 +10,17 @@ const productSchema = Schema({
     price: {
         type: Number
     },
-    cat_id: {
+    cat_name: {
         type: String
+    },
+    temperature: {
+        type: String,
+        enum: ['caliente', 'frio']
     },
     img_url: {
         type: String
     },
-    stock_id: {
+    stock_name: {
         type: String
     },
     stock_qty: {

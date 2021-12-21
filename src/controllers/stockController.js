@@ -1,9 +1,9 @@
 /**
  * Funciones requeridas:
  * 1. Ceracion de Stock Items                                   Probado     createItem
- * 2. Adicionde cantidad a stock (cantidad y ubicacion)         Probado     addQty
- * 3. Consulta de todod los stock items                         Probado     getAllItems 
- * 4. Consulta del stockItem por Nombre (todas las ubicaciones)In Progress  getItemById         Falla
+ * 2. Adicionde cantidad a stock (cantidad y ubicacion)   MAL   *no funciona    addQty
+ * 3. Consulta de todod los stock items                         *Probado     getAllItems 
+ * 4. Consulta del stockItem por Nombre (todas las ubicaciones) In Progress  getItemById         Falla
  * 5. Consulta de stock Item por id y por channel (ubicacion)   In Progress getItemByChannelId  Tengo problema de conceptualizacion id es unico 
  * 6. Traslado de cantidad de un stock item entre ubicaciones   Pend
  * 7. Consumo de Inventario (en linea / por venta)              Pend
@@ -24,37 +24,26 @@ class StockController {
 
     createItem = (req, res) => {
         let { name, quantity, channel, status } = req.body;
-        //let decode = jwt.decode(this.objTokenC.getToken(req), PRIVATE_KEY);  // este decode.id me provee el id para verificarw si es un 'admin'
-        let decode = true  //borrar al activar seguridad
         //Insertar/crear el Stock Item en la BD
-        if (decode) {
-            StockItem.create({ name, quantity, channel, status }, (error, data) => {
-                if (error) {
-                    res.status(500).json({ info: error });
-                } else {
-                    res.status(201).json(data);
-                }
-            });
-        } else {
-            res.status(500).json({ info: 'Operacion No autorizada' });
-        };
-    }
+        StockItem.create({ name, quantity, channel, status }, (error, data) => {
+            if (error) {
+                res.status(500).json({ info: error });
+            } else {
+                res.status(201).json(data);
+            }
+        });
+    };
+
 
     getAllItems = (req, res) => {
-        //let decode = jwt.decode(this.objTokenC.getToken(req), PRIVATE_KEY);  // este decode.id me provee el id para verificarw si es un 'admin'
-        let decode = true;    //borrar al activar seguridad
         //recuperar la lista de todos los Stock Item en la BD
-        if (decode) {
-            StockItem.find((error, data) => {
-                if (error) {
-                    res.status(500).json({ info: error });
-                } else {
-                    res.status(201).json(data);
-                }
-            })
-        } else {
-            res.status(500).json({ info: 'Operacion No autorizada' });
-        };
+        StockItem.find((error, data) => {
+            if (error) {
+                res.status(500).json({ info: error });
+            } else {
+                res.status(201).json(data);
+            }
+        });
     }
 
     getItemByName = (req, res) => {
@@ -95,7 +84,7 @@ class StockController {
     }
 
     addQty = (req, res) => {
-        let { id, channel, qty } = req.body;
+        let { name, channel, qty } = req.body;
         //let decode = jwt.decode(this.objTokenC.getToken(req), PRIVATE_KEY);  // este decode.id me provee el id para verificarw si es un 'admin'
         let decode = true;    //borrar al activar seguridad
         //Adicionaal Stock Item la cantidad especificada para una ubicacion en particular en la BD
