@@ -17,13 +17,19 @@ const createRoles = async function createRoles() {
 
                 new user_catModel(
                     {
-                        "name": "admin"
+                        "name": "admin",
+                        "allowed_routes": [
+                            {"url": "/test", "method": "GET"}
+                        ]
                     }
                 ).save(),
 
                 new user_catModel(
                     {
-                        "name": "clerk"
+                        "name": "clerk",
+                        "allowed_routes": [
+                            {"url": "/test", "method": "GET"}
+                        ]
                     }
                 ).save(),
 

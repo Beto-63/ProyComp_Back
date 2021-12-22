@@ -4,6 +4,7 @@
 const jwt = require('jsonwebtoken');
 
 const userModel = require('../models/user');
+const user_catModel = require('../models/user_catModel');
 
 const session_tokenModel = require('../models/session_tokenModel');
 
@@ -61,9 +62,59 @@ const verifyToken = async (req, res, next) => { // Es una funcion intermedia
             return res.status(404).json({message: 'No user found'});
         }else{// Si el usuario existe, se buscan los roles
 
-            console.log('token valido y el usuario existe');
-            next(); // Continua el código
-            return; // No continua el código / se encontró el rol requerido, respuesta true
+            //console.log('token valido y el usuario existe');
+
+            //console.log('MYmethod:',req.method, '- MYoriginalUrl:',req.originalUrl)
+            //console.log(req)
+
+            var originalUrl = req.originalUrl;
+            //console.log(originalUrl);
+
+
+            // TODO - Inicio split ruta --*/
+
+
+
+
+            // TODO - Fin split ruta --*/
+
+
+            // De todos los roles buscar el que esté incluido en userModel.roles
+            //const roles = await roleModel.find({_id: {$in: user.roles}}); // user.roles: El usuario que fué encontrado en la consulta anterior
+            const userRoles = await user_catModel.find({name: {$in: user.user_cat}});
+            //console.log(userRoles)
+
+            if (userRoles == '' || userRoles == null) {
+                return res.status(401).json({message: "No tiene rol asignado en el sistema"});
+            }
+
+            for (let i = 0; i < userRoles.length; i++) { // Roles del usuario encontrado
+
+                if(userRoles[i].allowed_routes != '' &&  userRoles[i].allowed_routes != null){ // Si el rol tiene rutas permitidas
+                //console.log(userRoles[i].allowed_routes);
+
+                    const objAllowedRoutes = userRoles[i].allowed_routes;
+                    //console.log(objAllowedRoutes);
+
+                    for (let j = 0; j < objAllowedRoutes.length; j++) { // Rutas permitidas según los roles que tenga el usuario
+                        
+                        console.log('Comparación de rutas: ',originalUrl, objAllowedRoutes[j].url, req.method, objAllowedRoutes[j].method);
+
+                        // Cuando la ruta es permitida, permite acceder al contenido
+                        if( originalUrl === objAllowedRoutes[j].url && req.method === objAllowedRoutes[j].method  ){ 
+                            console.log('Ruta permitida: ',originalUrl, objAllowedRoutes[j].url);
+                            next(); // Continua el código
+                            return; // No continua el código / se encontró el rol requerido, respuesta true
+                        }
+
+                    }
+
+                }
+
+            }
+
+            // No se encontró la ruta / retorna una respuesta false
+            return res.status(401).json({message: "No tiene acceso a esta ruta"});
 
         }
 

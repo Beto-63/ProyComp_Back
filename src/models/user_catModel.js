@@ -5,6 +5,14 @@ const user_catSchema = Schema({
         type: String,
         enum: ['admin', 'clerk']
     },
+    allowed_routes: [{
+        url: {
+            type: String
+        },
+        method: {
+            type: String
+        }
+    }]
 }, { timestamps: true,  /*collection: 'user_cat'*/ });
 
 module.exports = model('User_Cat', user_catSchema, 'user_cat');
