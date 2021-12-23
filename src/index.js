@@ -17,7 +17,7 @@ createRoles();
 //Importar Modulos y Clases : Rutas y Clase de Conexion
 const AuthRouter = require('./routers/auth.Routes');
 const IndexRouter = require('./routers/indexRouter');
-const UserRouter = require('./routers/userRouter');
+const UserRouter = require('./routers/user.Routes');
 
 const TestRouter = require('./routers/test.Routes');
 

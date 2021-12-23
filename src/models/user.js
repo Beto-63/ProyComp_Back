@@ -15,6 +15,12 @@ const userSchema = Schema({
         type: String,
         enum: ['admin', 'clerk']
     }],
+    status: {
+        type: Number,
+        default: 0,
+        enum: [0, 1, 2] // 0: deshabilitado, 1: activo, 2: restablecer contraseña
+    }
+
 }, { timestamps: true,  collection: 'user' });
 
 // Cifrar contraseña al crear el usuario   // Contraseña ingresada por el usuario al crear la cuenta
