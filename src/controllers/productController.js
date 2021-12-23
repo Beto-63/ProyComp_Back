@@ -10,56 +10,50 @@
 const Product = require('../models/product');
 
 class ProductController {
-    createProduct = (req, res) => {
-        let { name, description, price, cat_name, temperature, img_url, stock_name, stock_qty, status } = req.body;
-        //Insertar/crear el producto para venta en la BD
-        Product.create({ name, description, price, cat_name, temperature, img_url, stock_name, stock_qty, status }, (error, data) => {
-            if (error) {
-                res.status(500).json({ info: error });
-            } else {
-                res.status(200).json(data);
-            }
-        });
 
+    createProduct = async (req, res) => {
+        try {
+            let { name, description, price, cat_name, temperature, img_url, stock_name, stock_qty, status } = req.body;
+            //Insertar/crear el producto para venta en la BD
+            const data = await Product.create({ name, description, price, cat_name, temperature, img_url, stock_name, stock_qty, status });
+            res.status(201).json(data);
+        } catch (error) {
+            res.status(500).json({ info: error });
+        };
     };
 
-    adjustProduct = (req, res) => {
-        let { id } = req.body;
-        //Ajustar/crear el producto para venta en la BD
-        Product.findByIdAndUpdate(id, req.body, (error, data) => {
-            if (error) {
-                res.status(500).json({ info: error });
-            } else {
-                res.status(200).json(data);
-            }
-        });
+    adjustProduct = async (req, res) => {
+        try {
+            let { id } = req.body;
+            //Ajustar/crear el producto para venta en la BD
+            const data = await Product.findByIdAndUpdate(id, req.body);
+            res.status(201).json(data);
+        } catch (error) {
+            res.status(500).json({ info: error });
+        };
     };
 
-    selectByCategory = (req, res) => {
-        let { cat_name } = req.body;
-        //busca todos los productos de una categoria 
-        Product.find({ cat_name: cat_name }, (error, data) => {
-            if (error) {
-                res.status(500).json({ info: error });
-            } else {
-                res.status(200).json(data);
-            }
-        });
-
+    selectByCategory = async (req, res) => {
+        try {
+            let { cat_name } = req.body;
+            //busca todos los productos de una categoria 
+            const data = await Product.find({ cat_name: cat_name });
+            res.status(200).json(data);
+        } catch (error) {
+            res.status(400).json({ info: error });
+        };
     };
 
-    selectByCatAndTemp = (req, res) => {
-        let { cat_name, temperature } = req.body;
-        console.log(cat_name, temperature)
-        //busca todos los productos de una categoria y una temperatura 
-        Product.find({ cat_name: cat_name, temperature: temperature }, (error, data) => {
-            if (error) {
-                res.status(500).json({ info: error });
-            } else {
-                res.status(200).json(data);
-            }
-        });
-
+    selectByCatAndTemp = async (req, res) => {
+        try {
+            let { cat_name, temperature } = req.body;
+            console.log(cat_name, temperature)
+            //busca todos los productos de una categoria y una temperatura 
+            const data = await Product.find({ cat_name: cat_name, temperature: temperature });
+            res.status(200).json(data);
+        } catch (error) {
+            res.status(400).json({ info: error });
+        };
     };
 };
 

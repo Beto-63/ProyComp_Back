@@ -13,8 +13,8 @@ const ConnDb = require('./database/ConnDb');
 //Importar Modulos y Clases : Rutas y Clase de Conexion
 const IndexRouter = require('./routers/indexRouter');
 const UserRouter = require('./routers/userRouter');
-const StockRouter = require('./routers/stockRouter');
-const ProductRouter = require('./routers/productRouter');
+const StockRouter = require('./routers/stockRoutes');
+const ProductRouter = require('./routers/productRoutes');
 
 
 class Server {

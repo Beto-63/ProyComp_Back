@@ -12,11 +12,11 @@ class StockRouter {
         //Crear rutas
         this.router.post('/stock', objStockC.createItem);
         this.router.get('/stock', objStockC.getAllItems);
-        this.router.get('/stock/:name', objStockC.getItemByName);
-        this.router.get('/stock/find', objStockC.getItemByChannelId);
+        this.router.post('/stock/findByName', objStockC.getItemsByName);
+        this.router.post('/stock/findByNameChannel', objStockC.getItemByNameAndChannel);
         this.router.put('/stock/addQty', objStockC.addQty);
-        this.router.put('/stock/adjustItem', objStockC.adjustItem);
-
+        this.router.put('/stock/adjust', objStockC.adjustItem);
+        this.router.put('/stock/transfer', objStockC.transferQty);
     };
 };
 

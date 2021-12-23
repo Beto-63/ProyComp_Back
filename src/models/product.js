@@ -29,6 +29,7 @@ const productSchema = Schema({
     status: {
         type: Number,
         enum: [0, 1]
+        //enum: { values: [0, 1], message: '{VALUE} is not supported' } Asi manda un mesaje de error en caso que se viole la enumeracion
     }
 }, { collection: 'product' });
 
