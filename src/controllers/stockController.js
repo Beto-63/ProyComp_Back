@@ -1,11 +1,11 @@
 /**
  * Funciones requeridas:
  * 1. Ceracion de Stock Items                                       Probado     createItem
- * 2. Adicionde cantidad a stock (cantidad y ubicacion)             Probado     addQty
+ * 2. Adicion de cantidad a stock (cantidad y ubicacion)            Probado     addQty
  * 3. Consulta de todod los stock items                             Probado     getAllItems 
- * 4. Consulta del stockItem por Nombre (todas las ubicaciones)     Probado     getItemByName         Falla
- * 5. Consulta de stock Item por nombre y por channel (ubicacion)   Probado     getItemByChannelId  Tengo problema de conceptualizacion id es unico 
- * 6. Traslado de cantidad de un stock item entre ubicaciones       in progress transferQty
+ * 4. Consulta del stockItem por Nombre (todas las ubicaciones)     Probado     getItemByName        
+ * 5. Consulta de stock Item por nombre y por channel (ubicacion)   Probado     getItemByChannelId  
+ * 6. Traslado de cantidad de un stock item entre ubicaciones       Probado     transferQty
  * 7. Consumo de Inventario (en linea / por venta) COMPLEJO         Pend
  * 8. Ajuste de Inventario (por impresicion en la preparacion)      Probado     adjustItem
  * 9. Ajuste de Item (nombre, estado)                               Probado     adjustItem
@@ -18,6 +18,7 @@
 //Importar Modulos
 const { findByIdAndUpdate } = require('../models/stock_item');
 const StockItem = require('../models/stock_item');
+const Product = require('../models/product');
 
 
 
@@ -93,33 +94,48 @@ class StockController {
     transferQty = async (req, res) => {
 
         try {
-            let { name, source, destination, qty } = req.body
-            console.log(name, source, destination, qty);
-            const data = await StockItem.findOne({ name, source });
-            console.log("data 1 Original: ", data);
+            let { name, source, destination, qty } = req.body;
+            const data = await StockItem.findOne({ name: name, channel: source });
             data.quantity = data.quantity - qty;
-            console.log("data 1 restado: ", data);
-            //console.log("data.quantity", data.quantity);
-            await StockItem.findByIdAndUpdate(data._id, data);
-            data = {};
-            //res.status(201).json({ info: "Disminucion exitosa" });
-            try {
-                const data2 = await StockItem.findOne({ name, destination });
-                console.log("data 2 Original: ", data2);
-                data2.quantity = data2.quantity + qty;
-                //console.log("data2.quantity", data2.quantity)
-                console.log("data 2 adicionado: ", data2);
-                await StockItem.findByIdAndUpdate(data2._id, data2);
-                res.status(201).json({ info: "Adicion exitosa" });
-            } catch (error) {
-                res.status(400).json({ info: error });
-            }
-
+            await StockItem.findOneAndUpdate({ _id: data._id }, data);
+            const data2 = await StockItem.findOne({ name: name, source: destination });
+            data2.quantity = data2.quantity + qty;
+            await StockItem.findOneAndUpdate({ _id: data2._id }, data2);
+            res.status(201).json({ info: "Transferencia exitosa" });
         } catch (error) {
-
+            res.status(400).json({ info: error });
         }
     }
 
-};
+    // stockConsumption = async (req, res) => {
+
+    //     try {
+    //         const { prodVendidos, channel } = req.body;
+    //         let product = {};
+    //         let stock = {};
+    //         prodVendidos.forEach(element => {
+    //             product = await Product.findOneById(element[0]);
+    //             stock = await StockItem.findOne({ name: product.name, channel: channel });
+    //             stock.quantity = stock.quantity - product.stock_qty;
+    //             await StockItem.findOneAndUpdate(stock._id, stock);
+    //         });
+    //         res.status(201).json({ info: "Transferencia exitosa" });
+    //     } catch (error) {
+    //         res.status(400).json({ info: error });
+    //     }
+    // }
+
+}
+
+
+
+/**
+         * Aun no se si hacerlos para ser corrido en el 
+         * cierre o si debe ser corrido en cada venta
+         * Esta version seria para cada venta
+         */
+
+
+
 
 module.exports = StockController;   
