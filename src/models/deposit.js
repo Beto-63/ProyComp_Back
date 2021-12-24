@@ -2,9 +2,7 @@ const { Schema, model } = require('mongoose');
 
 const depositSchema = Schema({
 
-    date: {
-        type: Date
-    },
+
     amount: {
         type: Number
     },
@@ -15,6 +13,6 @@ const depositSchema = Schema({
         type: String
     }
 
-}, { collection: 'deposit' });
+}, { timestamps: true, collection: 'deposit' });
 
 module.exports = model('Deposit', depositSchema);

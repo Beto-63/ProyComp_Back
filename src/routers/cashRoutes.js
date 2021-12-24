@@ -1,18 +1,23 @@
 const express = require('express');
-const StockController = require("../controllers/stockController") /** aqui definir los que corresponden */
+const CashController = require("../controllers/cashController");
 
-class StockRouter {
+class CashRouter {
     constructor() {
         this.router = express.Router();
         this.#config();
     };
 
     #config() {
-        const objStockC = new StockController();
+        const objCashC = new CashController();
 
         //Crear rutas
-        this.router.post('/stock', objStockC.createItem);  /** usar este formato para las rutas pertinentes */
-
+        this.router.post('/cash/expense', objCashC.createExpense);
+        this.router.get('/cash/expense', objCashC.getAllExpenses);
+        this.router.post('/cash/deposit', objCashC.createDeposit);
+        this.router.post('/cash/openReg', objCashC.openRegister);
+        this.router.post('/cash/openReg', objCashC.closeRegister);
     };
 
 }
+
+module.exports = CashRouter;

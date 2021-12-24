@@ -10,9 +10,6 @@ const sell_ticketSchema = Schema({
     amount_sold: {
         type: Number
     },
-    date: {
-        type: Date
-    },
     channel_id: {
         type: String
     },
@@ -22,7 +19,7 @@ const sell_ticketSchema = Schema({
     user_id: {
         type: String
     }
-}, { collection: 'sell_ticket' });
+}, { timestamps: true, collection: 'sell_ticket' });
 
 module.exports = model('Sell_ticket', sell_ticketSchema);
 

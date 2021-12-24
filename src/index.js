@@ -15,6 +15,7 @@ const IndexRouter = require('./routers/indexRouter');
 const UserRouter = require('./routers/userRouter');
 const StockRouter = require('./routers/stockRoutes');
 const ProductRouter = require('./routers/productRoutes');
+const CashRouter = require('./routers/cashRoutes');
 
 
 class Server {
@@ -57,12 +58,14 @@ class Server {
         let userR = new UserRouter();
         let stockR = new StockRouter();
         let productR = new ProductRouter();
+        let cashR = new CashRouter();
 
         //-----------Añadir ruta a express----------
         this.app.use(indexR.router);
         this.app.use(userR.router);
         this.app.use(stockR.router);
         this.app.use(productR.router);
+        this.app.use(cashR.router);
 
         //Poner a la escucha el servidor
         this.app.listen(this.app.get('PORT'), () => {
