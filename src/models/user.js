@@ -13,8 +13,13 @@ const userSchema = Schema({
     },
     user_cat: [{
         type: String,
-        enum: ['admin', 'clerk']
+        enum: { values: ['admin', 'clerk'], message: '{VALUE} is not supported' }
     }],
+    status: {
+        type: Number,
+        default: 0,
+        enum: { values: [0, 1, 2], message: '{VALUE} is not supported' }
+    }
 }, { timestamps: true,  collection: 'user' });
 
 // Cifrar contraseña al crear el usuario   // Contraseña ingresada por el usuario al crear la cuenta
