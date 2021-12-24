@@ -8,7 +8,8 @@ const clientSchema = Schema({
         type: String
     },
     age_group: {
-        type: String
+        type: String,
+        enum: ['0-11', '12-19', '20-29', '30-40', '41-60', '61-80', '81-100']
     }
 }, { collection: 'client' });
 

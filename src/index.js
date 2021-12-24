@@ -18,6 +18,9 @@ createRoles();
 const AuthRouter = require('./routers/auth.Routes');
 const IndexRouter = require('./routers/indexRouter');
 const UserRouter = require('./routers/userRouter');
+const StockRouter = require('./routers/stockRoutes');
+const ProductRouter = require('./routers/productRoutes');
+const CashRouter = require('./routers/cashRoutes');
 
 const TestRouter = require('./routers/test.Routes');
 
@@ -42,7 +45,7 @@ class Server {
 
         // Para cuando me envien una petición POST desde un formulario, 
         // pueda entender los campos que vienen desde allí
-        this.app.use(express.urlencoded({extended: false})); 
+        this.app.use(express.urlencoded({ extended: false }));
 
         //Indicar al servidor que procesará datos en formato JSON durante las peticiones http
         this.app.use(express.json());
@@ -60,6 +63,9 @@ class Server {
         let authR = new AuthRouter();
         let indexR = new IndexRouter();
         let userR = new UserRouter();
+        let stockR = new StockRouter();
+        let productR = new ProductRouter();
+        let cashR = new CashRouter();
         
         let testR = new TestRouter();
 
@@ -67,6 +73,9 @@ class Server {
         this.app.use(authR.router);
         this.app.use(indexR.router);
         this.app.use(userR.router);
+        this.app.use(stockR.router);
+        this.app.use(productR.router);
+        this.app.use(cashR.router);
 
         this.app.use(testR.router);
 

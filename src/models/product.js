@@ -4,24 +4,31 @@ const productSchema = Schema({
     name: {
         type: String
     },
+    description: {
+        type: String
+    },
     price: {
         type: Number
     },
-    cat_id: {
+    cat_name: {
         type: String
+    },
+    temperature: {
+        type: String,
+        enum: ['caliente', 'frio']
     },
     img_url: {
         type: String
     },
-    ingredient_id: {
+    stock_name: {
         type: String
     },
-    ingredient_qty: {
+    stock_qty: {
         type: Number
     },
     status: {
         type: Number,
-        enum: [0, 1]
+        enum: { values: [0, 1], message: '{VALUE} is not supported' }
     }
 }, { collection: 'product' });
 

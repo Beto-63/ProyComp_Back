@@ -3,6 +3,10 @@ const { Schema, model } = require('mongoose');
 const payment_methodSchema = Schema({
     name: {
         type: String
+    },
+    status: {
+        type: Number,
+        enum: { values: [0, 1], message: '{VALUE} is not supported' }
     }
 }, { collection: 'payment_method' });
 
