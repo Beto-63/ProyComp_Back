@@ -16,11 +16,11 @@ createRoles();
 
 //Importar Modulos y Clases : Rutas y Clase de Conexion
 const AuthRouter = require('./routers/auth.Routes');
-const IndexRouter = require('./routers/indexRouter');
+const IndexRouter = require('./routers/index.Routes');
 const UserRouter = require('./routers/userRouter');
-const StockRouter = require('./routers/stockRoutes');
-const ProductRouter = require('./routers/productRoutes');
-const CashRouter = require('./routers/cashRoutes');
+const StockRouter = require('./routers/stock.Routes');
+const ProductRouter = require('./routers/product.Routes');
+const CashRouter = require('./routers/cash.Routes');
 
 const TestRouter = require('./routers/test.Routes');
 
@@ -66,7 +66,7 @@ class Server {
         let stockR = new StockRouter();
         let productR = new ProductRouter();
         let cashR = new CashRouter();
-        
+
         let testR = new TestRouter();
 
         //-----------Añadir ruta a express----------
