@@ -305,7 +305,7 @@ class AuthController {
                     <p>Ha solicitado resetear su contraseña.</p>
 
                     <p>Por favor, dar click en el siguiente link para restablecer su contraseña</p>
-                    <a href="http://`+link+`">Restablecer Contraseña</a>
+                    <a href="`+link+`">Restablecer Contraseña</a>
 
                     <p>Luego ingrese el siguiente código de verificación:</p>
                     <p>`+codigoGenerado+`</p>
