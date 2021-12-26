@@ -6,6 +6,9 @@
     /producto/find POST -> Consulta con varios criterios de busqueda (req.body)
     /producto/:id PUT -> Editar uno solo por id / cambiar estado
 
+    Sell Ticket
+    /sell_ticket GET -> Todos los tickets
+
 - Codigos de respuesta HTTP de la API:
 
     200: Consulta exitosa
