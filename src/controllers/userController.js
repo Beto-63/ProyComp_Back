@@ -134,7 +134,9 @@ class UserController {
             }
 
             // encriptando la contraseña
-            const encryptedPassword = await User.encryptPassword(password);
+            if (password != '' && password != null) {
+                var encryptedPassword = await User.encryptPassword(password);
+            }
 
             const updatedUser = await User.findByIdAndUpdate(id, {
                 nick: nick,
