@@ -20,10 +20,10 @@ class AuthRouter {
         this.router.post('/lost-password', objAuthC.generateNewTempPassword);
 
         // Valido si puedo mostrar el formulario o no
-        this.router.get('/recovery/:token/:userId', objAuthC.passwordResetRequest);
+        this.router.get('/recovery/:token', objAuthC.passwordResetRequest);
 
         // Recibo los datos de recuperación de la contraseña
-        this.router.post('/recovery/:token/:userId', objAuthC.passwordReset);
+        this.router.post('/recovery', objAuthC.passwordReset);
 
         //this.router.post('users/login/auth', authorizeRequest); por definir
     }
