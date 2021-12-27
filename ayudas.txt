@@ -8,6 +8,7 @@
 
     Sell Ticket
     /sell_ticket GET -> Todos los tickets
+    
 
 - Codigos de respuesta HTTP de la API:
 

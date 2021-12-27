@@ -10,7 +10,8 @@ class Sell_ticketRouter{
         //Objeto tipo Sell_ticket controller
         const Sell_ticketC = new Sell_ticketController();
         //Configurando las rutas
-        this.router.get('/sell_ticket', Sell_ticketC.getAllTickets)
+        this.router.get('/sell_ticket', Sell_ticketC.getAllTickets);
+        this.router.post('/sell_ticket', Sell_ticketC.newTicket);
     }
 }
 module.exports = Sell_ticketRouter;
