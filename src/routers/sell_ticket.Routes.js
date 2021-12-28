@@ -12,6 +12,7 @@ class Sell_ticketRouter{
         //Configurando las rutas
         this.router.get('/sell_ticket', Sell_ticketC.getAllTickets);
         this.router.post('/sell_ticket', Sell_ticketC.newTicket);
+        this.router.get('/sell_ticket/date', Sell_ticketC.getTicketByDate);
     }
 }
 module.exports = Sell_ticketRouter;

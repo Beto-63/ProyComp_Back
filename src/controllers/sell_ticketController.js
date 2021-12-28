@@ -10,13 +10,37 @@ class Sell_ticketController {
             }
         });
     }
-    newTicket = (req, res)=>{
+    getTicketByDate = (req, res) => {
+        let fechaInicial = req.body.fechaInicial;
+        let fechaFinal = req.body.fechaFinal;
+        Sell_ticket.find({
+            "$and": [{
+                "createdAt":{
+                    "$gte": fechaInicial,
+                    "$lte": fechaFinal
+                }
+                
+                    
+                
+        }]
+        }, (error, data) => {
+            if (error) {
+                res.status(500).json({ messaje: error })
+            } else {
+                res.status(200).json(data);
+            }
+        })
+
+    }
+
+
+    newTicket = (req, res) => {
         let objSellTicket = req.body;
-        Sell_ticket.create(objSellTicket, (error, data)=>{
-            if (error){
-                res.status(500).json({info: error});
-            }else{
-                res.status(201).json({message: 'Ticket Creado'})
+        Sell_ticket.create(objSellTicket, (error, data) => {
+            if (error) {
+                res.status(500).json({ info: error });
+            } else {
+                res.status(201).json({ message: 'Ticket Creado' })
             }
         })
     }
