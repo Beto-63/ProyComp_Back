@@ -113,7 +113,6 @@ class AuthController {
 
     // Login
     signIn = async (req, res) => {
-        //return res.status(200).json({ message: 'Login' });
 
         try {
             
@@ -149,7 +148,7 @@ class AuthController {
                 expiresIn: 86400
             });*/
             const token = jwt.sign({id: userFound._id}, random_password, {
-                expiresIn: 86400
+                expiresIn: 25200 // Turno más largo 7 horas 7*3600
             });
             //console.log(token);
 
@@ -172,13 +171,11 @@ class AuthController {
 
     // Logout
     signOut = async (req, res) => {
-        //return res.status(200).json({ message: 'Logout' });
 
         try {
 
             //console.log(req.headers)
 
-            //const token = req.headers["x-access-token"];
             const authorization = req.headers["authorization"];
             //console.log(authorization)
 
@@ -197,9 +194,6 @@ class AuthController {
             if(!token){ // Sino existe el token
                 return res.status(403).json({message: 'No token provided (logout)'});
             }
-
-
-            /*gfhjgfjhgjhgfjfghkf*/
 
             const tokenFound = await session_tokenModel.findOne({token: token});
             //console.log('Token Found ',tokenFound);
@@ -248,12 +242,18 @@ class AuthController {
             //    return res.status(400).json({ msg: "Este formato de id no es valido" });
             //}
 
-            // Validar si el id de usuario existe
+            // Validar si el email de usuario existe
             //const user = await userModel.findOne({_id: user_id});
             const user = await userModel.findOne({ email: user_email });
 
+            // Si el usuario no fué encontrado en la DB
             if(!user){
-                return res.status(400).json({ message: 'El email ingresado no existe en la DB' });
+                return res.status(400).json({ message: 'Esta cuenta no existe en el sistema. (no existe en la DB)' });
+            }
+
+            // Si el estado de ese usuario es 0 (desactivado), mostrar mensaje de error
+            if(user.status == 0){
+                return res.status(400).json({ message: 'Esta cuenta no existe en el sistema. (usuario desactivado / status: 0)' });
             }
 
             // Como el usuario existe y el admin solicitó restablecer contraseña,
@@ -321,7 +321,7 @@ class AuthController {
             return res.status(200).json({ message: 'Envio del link para reset del password', link });
 
         } catch (error) {
-            return res.status(401).json({message: 'Error al hacer generateNewTempPassword', error});
+            return res.status(401).json({message: 'Error al hacer generateNewTempPassword (Generar link de restablecer contraseña / envío de email)', error});
         }
 
     }
@@ -329,26 +329,41 @@ class AuthController {
     // Solicitud get para validar link y mostrar formulario
     passwordResetRequest = async (req, res) => { // Metodo GET
 
-        // Se recibe el link con el token para validar si el link es válido
-        // y saber si puedo mostrar el formulario o no. (Posiblemente redireccionar al Login en el frontend)
+        try {
+            
+            // Se recibe el link con el token para validar si el link es válido
+            // y saber si puedo mostrar el formulario o no. (Posiblemente redireccionar al Login en el frontend)
 
-        //console.log(req.params);
-        const { 
-            token,
-            //userId
-        } = req.params;
+            //console.log(req.params);
+            const { 
+                token,
+                //userId
+            } = req.params;
 
-        // Se valida si el link existe en las solicitudes de recuperación de contraseña
-        const found = await recovery_tokenModel.findOne({ reset_token: token, /*user_id: userId*/ });
-        //console.log(found);
+            // Se valida si el link existe en las solicitudes de recuperación de contraseña
+            const found = await recovery_tokenModel.findOne({ reset_token: token, /*user_id: userId*/ });
+            //console.log(found);
 
-        // Se valida si el link es válido o no
-        if(!found){
-            return res.status(400).json({ message: 'Link invalido o caducado' });
-        }else{
-            // El token válido, encontrado en la consulta anterior
-            const token = found.reset_token;
-            return res.status(200).json({ message: 'El link es válido / mostrar el formulario para restablecer contraseña', token });
+            // Se valida si el link es válido o no
+            if(!found){
+                return res.status(400).json({ message: 'Link invalido o caducado' });
+            }else{
+                // El token válido, encontrado en la consulta anterior
+
+                // Buscar el usuario por id, en la colección de usuarios, según el recovery_token encontrado
+                const user = await userModel.findById( found.user_id, {password: 0} );
+
+                // Si el estado de ese usuario actualmente es 0 (desactivado), mostrar mensaje de error
+                if(user.status == 0){
+                    return res.status(400).json({ message: 'Esta cuenta no existe en el sistema. (usuario desactivado / status: 0)' });
+                }
+
+                const token = found.reset_token;
+                return res.status(200).json({ message: 'El link es válido / mostrar el formulario para restablecer contraseña', token });
+            }
+            
+        } catch (error) {
+            return res.status(401).json({message: 'Error al hacer passwordResetRequest (validación del link de restablecer contraseña)', error});
         }
 
     }
@@ -356,56 +371,71 @@ class AuthController {
     // Recibir los datos para el cambio de contraseña
     passwordReset = async (req, res) => { // Metodo POST
 
-        //console.log(req.body);
-        const body = req.body;
+        try {
 
-        const {
-            token,
-            codigoVerificacion,
-            password1,
-            password2
-        } = req.body;
+            //console.log(req.body);
+            const body = req.body;
 
-        // Se valida si el link existe en las solicitudes de recuperación de contraseña
-        const found = await recovery_tokenModel.findOne({ reset_token: token, verification_code: codigoVerificacion });
+            const {
+                token,
+                codigoVerificacion,
+                password1,
+                password2
+            } = req.body;
 
-        // Se valida si el código de verificación es válido o no
-        if(!found){
-            return res.status(400).json({ message: 'Código de verificación incorrecto / token incorrecto' });
+            // Se valida si el link existe en las solicitudes de recuperación de contraseña
+            const found = await recovery_tokenModel.findOne({ reset_token: token, verification_code: codigoVerificacion });
+
+            // Se valida si el código de verificación es válido o no
+            if(!found){
+                return res.status(400).json({ message: 'Código de verificación incorrecto / token incorrecto' });
+            }
+
+
+            // El token válido, encontrado en la consulta anterior
+
+            // Buscar el usuario por id, en la colección de usuarios, según el recovery_token encontrado
+            const user = await userModel.findById( found.user_id, {password: 0} );
+
+            // Si el estado de ese usuario es 0 (desactivado), mostrar mensaje de error
+            if(user.status == 0){
+                return res.status(400).json({ message: 'Esta cuenta no existe en el sistema. (usuario desactivado / status: 0)' });
+            }
+
+
+            // Se valida si las contraseñas no coinciden, se devuelve una respuesta de error
+            if (password1 != password2) {
+                return res.status(400).json({ message: 'Las contraseñas no coinciden' });
+            }
+
+            // Todas las validaciones anteriores pasaron exitosamente
+            // Se procede actualizar la contraseña del usuario
+            
+            // encriptando la contraseña
+            if (
+                password1 != '' && password1 != null
+            ) {
+                var encryptedPassword = await userModel.encryptPassword(password1);
+            }
+
+            // Se busca el usuario
+            const updatedUser = await userModel.findByIdAndUpdate(found.user_id, {
+                password: encryptedPassword, // Nueva contraseña cifrada
+                status: 1, // Usuario habilitado nuevamente
+            }, {new: true});
+            //console.log(updatedUser);
+
+            // Si la consulta actualiza correctamente la nueva contraseña
+            if (updatedUser != null) {
+                return res.status(201).json({ message: 'Contraseña actualizada correctamente (redireccionar al login)' });
+            }else{
+                // Si el id no se encuentra en DB y la consulta es vacia
+                return res.status(404).json({ message: 'Usuario no encontrado' });
+            }
+
+        } catch (error) {
+            return res.status(401).json({message: 'Error al hacer passwordReset (recibir datos del formulario) ', error});
         }
-
-        // Se valida si las contraseñas no coinciden, se devuelve una respuesta de error
-        if (password1 != password2) {
-            return res.status(400).json({ message: 'Las contraseñas no coinciden' });
-        }
-
-        // Todas las validaciones anteriores pasaron exitosamente
-        // Se procede actualizar la contraseña del usuario
-        
-        // encriptando la contraseña
-        if (
-            password1 != '' && password1 != null
-        ) {
-            var encryptedPassword = await userModel.encryptPassword(password1);
-        }
-
-        // Se busca el usuario
-        const updatedUser = await userModel.findByIdAndUpdate(found.user_id, {
-            password: encryptedPassword, // Nueva contraseña cifrada
-            status: 1, // Usuario habilitado nuevamente
-        }, {new: true});
-        //console.log(updatedUser);
-
-        // Si la consulta actualiza correctamente la nueva contraseña
-        if (updatedUser != null) {
-            return res.status(201).json({ message: 'Contraseña actualizada correctamente (redireccionar al login)' });
-        }else{
-             // Si el id no se encuentra en DB y la consulta es vacia
-            return res.status(404).json({ message: 'Usuario no encontrado' });
-        }
-
-
-        
 
     }
 
