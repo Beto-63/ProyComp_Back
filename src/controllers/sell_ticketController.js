@@ -18,10 +18,7 @@ class Sell_ticketController {
                 "createdAt":{
                     "$gte": fechaInicial,
                     "$lte": fechaFinal
-                }
-                
-                    
-                
+                }     
         }]
         }, (error, data) => {
             if (error) {
@@ -33,7 +30,16 @@ class Sell_ticketController {
 
     }
 
-
+    getTicketById = (req,res)=>{
+        const id = req.params.id;
+        Sell_ticket.findById(id, (error, data)=>{
+            if (error){
+                res.status(500).json({info: error})
+            }else{
+                res.status(200).json(data)
+            }
+        })
+    }
     newTicket = (req, res) => {
         let objSellTicket = req.body;
         Sell_ticket.create(objSellTicket, (error, data) => {
