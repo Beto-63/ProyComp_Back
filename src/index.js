@@ -24,6 +24,7 @@ const CashRouter = require('./routers/cashRoutes');
 const Sell_ticketRouter = require('./routers/sell_ticket.Routes');
 
 const TestRouter = require('./routers/test.Routes');
+const ClientRouter = require('./routers/client.Routes');
 
 
 class Server {
@@ -69,6 +70,7 @@ class Server {
         let productR = new ProductRouter();
         let cashR = new CashRouter();
         let sell_ticketR = new Sell_ticketRouter();
+        let clientR = new ClientRouter();
         
         let testR = new TestRouter();
 
@@ -80,6 +82,7 @@ class Server {
         this.app.use(productR.router);
         this.app.use(cashR.router);
         this.app.use(sell_ticketR.router);
+        this.app.use(clientR.router);
 
         this.app.use(testR.router);
 

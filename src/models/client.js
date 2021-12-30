@@ -4,6 +4,9 @@ const clientSchema = Schema({
     email: {
         type: String
     },
+    name: {
+        type: String
+    },
     gender: {
         type: String
     },

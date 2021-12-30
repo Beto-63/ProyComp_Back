@@ -8,7 +8,15 @@
 
     Sell Ticket
     /sell_ticket GET -> Todos los tickets
-    
+    /sell_ticket/date GET -> Obtener los tickets por rango de fechas se debe consultar así: {"fechaInicial": "2021-12-27", "fechaFinal": "2021-12-28T23:59:59.999Z"} (req.body)
+    /sell_ticket/:id GET -> Obtener ticket por id (req.params)
+    /sell_ticket POST -> crear ticket (req.body)
+
+    Client
+    /client GET -> Obtener todos los clientes (req.body)
+    /client/:id GET -> Clientes por Id (req.params)
+    /client POST -> crear Cliente (req.body)
+    /client/update PUT -> Actualizar cliente, se debe poner como primer campo el _id (req.body)
 
 - Codigos de respuesta HTTP de la API:
 
