@@ -33,6 +33,15 @@ const createRoles = async function createRoles() {
                     }
                 ).save(),
 
+                /*new user_catModel(
+                    {
+                        "categoria_de_ruta": "productos ", 
+                        "rutas": [
+                            {"url": "/test", "method": "GET"}
+                        ]
+                    }
+                ).save(),*/
+
             ]);
         
             console.log(values);
