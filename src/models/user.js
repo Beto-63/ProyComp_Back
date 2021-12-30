@@ -22,6 +22,7 @@ const userSchema = Schema({
     }
 }, { timestamps: true,  collection: 'user' });
 
+
 // Se ejecuta antes de guardar el dato en la base de datos
 /*userSchema.pre("save", async function (next) {
     const user = this; // Hace referencia al objeto userSchema

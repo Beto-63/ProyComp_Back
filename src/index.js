@@ -16,10 +16,17 @@ createRoles();
 
 //Importar Modulos y Clases : Rutas y Clase de Conexion
 const AuthRouter = require('./routers/auth.Routes');
-const IndexRouter = require('./routers/indexRouter');
 const UserRouter = require('./routers/user.Routes');
+const IndexRouter = require('./routers/index.Routes');
+const StockRouter = require('./routers/stock.Routes');
+const ProductRouter = require('./routers/product.Routes');
+const CashRouter = require('./routers/cash.Routes');
+const Sell_ticketRouter = require('./routers/sell_ticket.Routes');
+const ClientRouter = require('./routers/client.Routes');
 
+// Ruta de pruebas de auth y token
 const TestRouter = require('./routers/test.Routes');
+
 
 class Server {
 
@@ -42,7 +49,7 @@ class Server {
 
         // Para cuando me envien una petición POST desde un formulario, 
         // pueda entender los campos que vienen desde allí
-        this.app.use(express.urlencoded({extended: false})); 
+        this.app.use(express.urlencoded({ extended: false }));
 
         //Indicar al servidor que procesará datos en formato JSON durante las peticiones http
         this.app.use(express.json());
@@ -60,6 +67,11 @@ class Server {
         let authR = new AuthRouter();
         let indexR = new IndexRouter();
         let userR = new UserRouter();
+        let stockR = new StockRouter();
+        let productR = new ProductRouter();
+        let cashR = new CashRouter();
+        let sell_ticketR = new Sell_ticketRouter();
+        let clientR = new ClientRouter();
         
         let testR = new TestRouter();
 
@@ -67,6 +79,11 @@ class Server {
         this.app.use(authR.router);
         this.app.use(indexR.router);
         this.app.use(userR.router);
+        this.app.use(stockR.router);
+        this.app.use(productR.router);
+        this.app.use(cashR.router);
+        this.app.use(sell_ticketR.router);
+        this.app.use(clientR.router);
 
         this.app.use(testR.router);
 
@@ -75,8 +92,6 @@ class Server {
             console.log("Servidor corriendo por el puerto => ", this.app.get('PORT'))
         });
     }
-
-
 
 }
 new Server();
