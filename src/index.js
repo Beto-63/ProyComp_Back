@@ -16,15 +16,16 @@ createRoles();
 
 //Importar Modulos y Clases : Rutas y Clase de Conexion
 const AuthRouter = require('./routers/auth.Routes');
-const IndexRouter = require('./routers/indexRouter');
+const IndexRouter = require('./routers/index.Routes');
 const UserRouter = require('./routers/userRouter');
-const StockRouter = require('./routers/stockRoutes');
-const ProductRouter = require('./routers/productRoutes');
-const CashRouter = require('./routers/cashRoutes');
+const StockRouter = require('./routers/stock.Routes');
+const ProductRouter = require('./routers/product.Routes');
+const CashRouter = require('./routers/cash.Routes');
 const Sell_ticketRouter = require('./routers/sell_ticket.Routes');
-
-const TestRouter = require('./routers/test.Routes');
 const ClientRouter = require('./routers/client.Routes');
+
+// Ruta de pruebas de auth y token
+const TestRouter = require('./routers/test.Routes');
 
 
 class Server {
@@ -91,8 +92,6 @@ class Server {
             console.log("Servidor corriendo por el puerto => ", this.app.get('PORT'))
         });
     }
-
-
 
 }
 new Server();

@@ -1,3 +1,8 @@
+/**Revisar la concepcion de esto para manejar el estado de la caja
+ * incluyendo los campos de reumen del dia
+ * Sirve para consultas diarias por ubicacion
+ */
+
 const { Schema, model } = require('mongoose');
 
 const cashOpsSchema = Schema({

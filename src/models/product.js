@@ -1,6 +1,11 @@
 const { Schema, model } = require('mongoose');
 
 const productSchema = Schema({
+    product_id: {
+        type: Number,
+        index: true,
+        unique: true
+    },
     name: {
         type: String
     },
@@ -35,6 +40,10 @@ const productSchema = Schema({
 module.exports = model('Product', productSchema);
 
 /* ++++++++++++++++++++++++++++++++++++++++++++++++++
+++OJO++ Se incluyo un product_id para lograr la inclusion de 
+las ventas por WIX. Las ventas por Wix van a ser contabilizadas 
+como hechas por Arsenal, pues son despachadas desde alli.Adicionalmente 
+afectan los inventariables de esa Ubicacion
 Las categorias de producto sirven para seleccionar dentro del
 Catalogo de productos
 Actualmente se considera deben ser:

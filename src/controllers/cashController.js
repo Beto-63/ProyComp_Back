@@ -6,6 +6,8 @@
  * 4. registro de gastos menores                Probado     createExpense
  * 5. Reporete de gastos entre fechas           In progress getAllExpenses
  * 6  Reporte de consignaciones entr fechas  
+ * Generar validacion al momneto de entrar gastos o consignaciones
+
  */
 
 //Importar Modulos

@@ -4,6 +4,8 @@
  * 2. listar productos por categoria                    Probado
  * 3. listar productos por categoria y temperatura      Probado
  * 4. Modificacion de Productos                         Probado
+ * 5. crear Combo
+ * 6. modificar combo
  */
 
 // Importar Modulos
@@ -13,16 +15,38 @@ class ProductController {
 
     createProduct = async (req, res) => {
         try {
-            let { name, description, price, cat_name, temperature, img_url, stock_name, stock_qty, status } = req.body;
+            let { product_id, name, description, price, cat_name, temperature, img_url, stock_name, stock_qty, status } = req.body;
             //Insertar/crear el producto para venta en la BD
-            const data = await Product.create({ name, description, price, cat_name, temperature, img_url, stock_name, stock_qty, status });
+            const data = await Product.create({ product_id, name, description, price, cat_name, temperature, img_url, stock_name, stock_qty, status });
             res.status(201).json(data);
         } catch (error) {
             res.status(500).json({ info: error });
         };
     };
 
+    createCombo = async (req, res) => {
+        try {
+            let { name, product_id, contents, status } = req.body;
+            //Insertar/crear el producto para venta en la BD
+            const data = await Product.create({ name, product_id, contents, status });
+            res.status(201).json(data);
+        } catch (error) {
+            res.status(500).json({ info: error }); S
+        };
+    };
+
     adjustProduct = async (req, res) => {
+        try {
+            let { id } = req.body;
+            //Ajustar/crear el producto para venta en la BD
+            const data = await Product.findByIdAndUpdate(id, req.body);
+            res.status(201).json(data);
+        } catch (error) {
+            res.status(500).json({ info: error });
+        };
+    };
+
+    adjustCombo = async (req, res) => {
         try {
             let { id } = req.body;
             //Ajustar/crear el producto para venta en la BD

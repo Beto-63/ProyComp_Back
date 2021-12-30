@@ -30,9 +30,7 @@ Debe tener:
 la venta con las caracterisitidas demograficas del cliente
 Productos
 - Productos vendidos es un arreglo con los 
-    - prucuct id
-    - qty
-    - monto en pesos del line item
+    - [prucuct id, qty, monto en pesos del line item]
 - Monto de la venta total
 - date ******Debe capturar el dia y la hora******
 - Channel id
