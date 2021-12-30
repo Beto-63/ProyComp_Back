@@ -21,8 +21,12 @@ const UserRouter = require('./routers/userRouter');
 const StockRouter = require('./routers/stock.Routes');
 const ProductRouter = require('./routers/product.Routes');
 const CashRouter = require('./routers/cash.Routes');
+const Sell_ticketRouter = require('./routers/sell_ticket.Routes');
+const ClientRouter = require('./routers/client.Routes');
 
+// Ruta de pruebas de auth y token
 const TestRouter = require('./routers/test.Routes');
+
 
 class Server {
 
@@ -66,7 +70,9 @@ class Server {
         let stockR = new StockRouter();
         let productR = new ProductRouter();
         let cashR = new CashRouter();
-
+        let sell_ticketR = new Sell_ticketRouter();
+        let clientR = new ClientRouter();
+        
         let testR = new TestRouter();
 
         //-----------Añadir ruta a express----------
@@ -76,6 +82,8 @@ class Server {
         this.app.use(stockR.router);
         this.app.use(productR.router);
         this.app.use(cashR.router);
+        this.app.use(sell_ticketR.router);
+        this.app.use(clientR.router);
 
         this.app.use(testR.router);
 
@@ -84,8 +92,6 @@ class Server {
             console.log("Servidor corriendo por el puerto => ", this.app.get('PORT'))
         });
     }
-
-
 
 }
 new Server();
