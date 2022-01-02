@@ -4,8 +4,8 @@
  * 2. Cierre de caja
  * 3. registro de consignaciones                Probado     createDeposit
  * 4. registro de gastos menores                Probado     createExpense
- * 5. Reporete de gastos entre fechas           In progress getAllExpenses
- * 6  Reporte de consignaciones entr fechas  
+ * 5. Reporte de gastos entre fechas            Probado     getExpensesByDate
+ * 6  Reporte de consignaciones entre fechas    Probado     getDepositsByDate
  * Generar validacion al momneto de entrar gastos o consignaciones
 
  */
@@ -28,13 +28,38 @@ class CashController {
         }
     }
 
-    getAllExpenses = async (req, res) => {
+    //Quitar los console log son de prueba para la expresion de las horas respecto de las 
+    // guardadas en la BD
+    getExpensesByDate = async (req, res) => {
+        //Recupera los gastos entre dos fecha/hora
+        try {
+            let { fechaInicial, fechaFinal } = req.body;
+            const data = await ExpenseItem.find({
+                "$and": [{
+                    "createdAt": {
+                        "$gte": fechaInicial,
+                        "$lte": fechaFinal
+                    }
+                }]
+            })
+            console.log(data[0].createdAt.toString())
+            console.log(data[0].createdAt)
+            res.status(201).json({ resultado: data })
+        } catch (error) {
+            res.status(500).json({ Info: error })
+        }
+
+    }
+
+
+    getAllExpenses = async (req, res) => {      //not needed
         try {
             const data = await ExpenseItem.find();
             res.status(201).json(data)
         } catch (error) {
             res.status(500).json({ info: error });
         }
+
     }
 
     createDeposit = async (req, res) => {
@@ -44,6 +69,23 @@ class CashController {
             res.status(201).json({ Info: 'Se creo la consignacion' })
         } catch (error) {
             res.status(500).json({ info: error });
+        }
+    }
+
+    getDepositsByDate = async (req, res) => {
+        try {
+            let { fechaInicial, fechaFinal } = req.body;
+            const data = await DepositItem.find({
+                "$and": [{
+                    "createdAt": {
+                        "$gte": fechaInicial,
+                        "$lte": fechaFinal
+                    }
+                }]
+            })
+            res.status(201).json({ resultado: data })
+        } catch (error) {
+            res.status(500).json({ Info: error })
         }
     }
 

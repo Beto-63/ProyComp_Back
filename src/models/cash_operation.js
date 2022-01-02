@@ -18,7 +18,15 @@ const cashOpsSchema = Schema({
     operation: {
         type: String,
         enum: { values: ['open', 'close'], message: '{VALUE} is not supported' }
+    },
+    status: {
+        type: String,
+        enum: { values: ['open', 'close'], message: '{VALUE} is not supported' }
     }
 }, { timestamps: true, collection: 'cash_ops' });
 
 module.exports = model('CashOps', cashOpsSchema);
+
+/**
+ * Esta estructuda de datos no esta terminada y no creo que sea definitiva
+ *  */ 

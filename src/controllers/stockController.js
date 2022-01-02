@@ -6,7 +6,7 @@
  * 4. Consulta del stockItem por Nombre (todas las ubicaciones)     Probado     getItemByName        
  * 5. Consulta de stock Item por nombre y por channel (ubicacion)   Probado     getItemByChannelId  
  * 6. Traslado de cantidad de un stock item entre ubicaciones       Probado     transferQty
- * 7. Consumo de Inventario (en linea / por venta) COMPLEJO         Pend
+ * 7. Consumo de Inventario (en linea / por venta) COMPLEJO         Pend        Ya funciona para productos NO para COMBOS
  * 8. Ajuste de Inventario (por impresicion en la preparacion)      Probado     adjustItem
  * 9. Ajuste de Item (nombre, estado)                               Probado     adjustItem
  */
@@ -16,9 +16,11 @@
 
 
 //Importar Modulos
-const { findByIdAndUpdate } = require('../models/stock_item');
+const { findByIdAndUpdate, findOne } = require('../models/stock_item');
 const StockItem = require('../models/stock_item');
 const Product = require('../models/product');
+const Combo = require('../models/combo');
+const SellTicket = require('../models/sell_ticket');
 
 
 
@@ -73,7 +75,11 @@ class StockController {
             let { name, channel } = req.body;
             //retona el Stock Item que conicida Nombre y en una especifica ubicacion en la BD
             const data = await StockItem.findOne({ name: name, channel: channel });
-            res.status(201).json(data);
+            if (data.status == 1) {
+                res.status(201).json(data);
+            } else {
+                res.json({ Error: "El item del stock esta inactivo" })
+            }
         } catch (error) {
             res.status(400).json({ info: error });
         }
@@ -83,9 +89,13 @@ class StockController {
         try {
             let { name, channel, qty } = req.body;
             const data = await StockItem.findOne({ name, channel });
-            data.quantity = data.quantity + qty;
-            await StockItem.findByIdAndUpdate(data._id, data);
-            res.status(201).json({ info: "Actualizacion exitosa" });
+            if (data.status == 1) {
+                data.quantity = data.quantity + qty;
+                await StockItem.findByIdAndUpdate(data._id, data);
+                res.status(201).json({ info: "Actualizacion exitosa" });
+            } else {
+                res.json({ Error: "El item del stock esta inactivo" })
+            }
         } catch (error) {
             res.status(400).json({ info: error });
         };
@@ -96,38 +106,61 @@ class StockController {
         try {
             let { name, source, destination, qty } = req.body;
             const data = await StockItem.findOne({ name: name, channel: source });
-            data.quantity = data.quantity - qty;
-            await StockItem.findOneAndUpdate({ _id: data._id }, data);
-            const data2 = await StockItem.findOne({ name: name, source: destination });
-            data2.quantity = data2.quantity + qty;
-            await StockItem.findOneAndUpdate({ _id: data2._id }, data2);
-            res.status(201).json({ info: "Transferencia exitosa" });
+            const data2 = await StockItem.findOne({ name: name, channel: destination });
+            if (data.status == 1 && data2.status == 1) {
+                data.quantity = data.quantity - qty;
+                await StockItem.findOneAndUpdate({ _id: data._id }, data);
+                data2.quantity = data2.quantity + qty;
+                await StockItem.findOneAndUpdate({ _id: data2._id }, data2);
+                res.status(201).json({ info: "Transferencia exitosa" });
+            } else {
+                res.json({ Error: "El item del stock esta inactivo" })
+            }
         } catch (error) {
             res.status(400).json({ info: error });
         }
     }
 
-    // stockConsumption = async (req, res) => {
+    stockConsumption = async (req, res) => {
 
-    //     try {
-    //         const { prodVendidos, channel } = req.body;
-    //         let product = {};
-    //         let stock = {};
-    //         prodVendidos.forEach(element => {
-    //             product = await Product.findOneById(element[0]);
-    //             stock = await StockItem.findOne({ name: product.name, channel: channel });
-    //             stock.quantity = stock.quantity - product.stock_qty;
-    //             await StockItem.findOneAndUpdate(stock._id, stock);
-    //         });
-    //         res.status(201).json({ info: "Transferencia exitosa" });
-    //     } catch (error) {
-    //         res.status(400).json({ info: error });
-    //     }
-    // }
+        try {
+            const { sell_ticket_id, channel } = req.body;
+            let objSellTicket, objProduct, objStock, objCombo = {}
+            let consumption = null
+            objSellTicket = await SellTicket.findOne({ _id: sell_ticket_id });
+            console.log("Sell Ticket", objSellTicket);
+            objSellTicket.products_sold.forEach(async (element) => {
+                objProduct = await Product.findById({ _id: element[0] });
+                console.log("producto = ", objProduct);
+                if (objProduct.cat_name != 'combo') {
+                    console.log("producto, cantidad, precio =", element[0], element[1], element[2])
+
+                    objStock = await StockItem.findOne({ name: objProduct.stock_name, channel: channel });
+                    console.log("stock item", objStock);
+                    consumption = element[1] * objProduct.stock_qty;
+                    console.log("consumption", consumption);
+                    objStock.quantity = objStock.quantity - consumption;
+                    console.log("Nueva Cantidad", objStock.quantity)
+                    await StockItem.findOneAndUpdate({ name: objProduct.stock_name, channel: channel }, objStock);
+                }
+                // Aqui debo descomponer el combo y repetir lo de arriba para cada elemento
+                else {
+                    objCombo = await Combo.findById({ _id: element[0] });
+                    console.log("Combo", objCombo);
+                    //     objCombo = await Combo.findOne()
+                    //     console.log("combo", objCombo)
+                };
+                res.status(201).json({ info: "Descontada venta del inventario" });
+            });
+
+
+        } catch (error) {
+            res.status(400).json({ info: error });
+        }
+
+    }
 
 }
-
-
 
 /**
          * Aun no se si hacerlos para ser corrido en el 
