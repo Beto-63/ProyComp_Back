@@ -1,8 +1,11 @@
 const { Schema, model } = require('mongoose');
 
 const comboSchema = Schema({
+    name: {
+        type: String
+    },
     product_id: {
-        type: number
+        type: Number
     },
     contents: {
         type: Array
@@ -11,9 +14,9 @@ const comboSchema = Schema({
         type: Number,
         enum: { values: [0, 1], message: '{VALUE} is not supported' }
     }
-}, { collection: 'category' });
+}, { collection: 'combo' });
 
-module.exports = model('Category', comboSchema);
+module.exports = model('Combo', comboSchema);
 
 /**++++++++++++++++++++++++++++++++++++++++++++
  * los combos si bien son un producto "vendible", son grupos de productos, 

@@ -17,6 +17,7 @@ class StockRouter {
         this.router.put('/stock/addQty', objStockC.addQty);
         this.router.put('/stock/adjust', objStockC.adjustItem);
         this.router.put('/stock/transfer', objStockC.transferQty);
+        this.router.put('/stock', objStockC.stockConsumption);
     };
 };
 

@@ -72,7 +72,7 @@ class Server {
         let cashR = new CashRouter();
         let sell_ticketR = new Sell_ticketRouter();
         let clientR = new ClientRouter();
-        
+
         let testR = new TestRouter();
 
         //-----------Añadir ruta a express----------
