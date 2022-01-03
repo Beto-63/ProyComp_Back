@@ -2,25 +2,37 @@ const { Schema, model } = require('mongoose');
 const bcrypt = require('bcrypt');
 
 const userSchema = Schema({
-    nick: {
+    user: {
+        type: String
+    },
+    user_id: {
+        type: Number
+    },
+    name: {
         type: String
     },
     email: {
         type: String
     },
-    password: {
+    personal_email: {
         type: String
     },
     user_cat: [{
         type: String,
         enum: { values: ['admin', 'clerk'], message: '{VALUE} is not supported' }
     }],
+    phone: {
+        type: String
+    },
+    password: {
+        type: String
+    },
     status: {
         type: Number,
         default: 0,
         enum: { values: [0, 1, 2], message: '{VALUE} is not supported' } // 0: deshabilitado, 1: activo, 2: restablecer contraseña
     }
-}, { timestamps: true,  collection: 'user' });
+}, { timestamps: true, collection: 'user' });
 
 
 // Se ejecuta antes de guardar el dato en la base de datos

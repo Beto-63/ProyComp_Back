@@ -22,6 +22,9 @@ const cashOpsSchema = Schema({
     status: {
         type: String,
         enum: { values: ['open', 'close'], message: '{VALUE} is not supported' }
+    },
+    date: {
+        type: Date
     }
 }, { timestamps: true, collection: 'cash_ops' });
 

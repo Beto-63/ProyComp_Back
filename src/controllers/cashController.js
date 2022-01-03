@@ -1,8 +1,8 @@
 /**
  * Funciones requeridas:
- * 1. Apertura de caja                          In Progress openRegister
+ * 1. Apertura de caja                          definir amount to deposit      openRegister
  * 2. Cierre de caja
- * 3. registro de consignaciones                Probado     createDeposit
+ * 3. registro de consignaciones                Probar acumulado     createDeposit
  * 4. registro de gastos menores                Probado     createExpense
  * 5. Reporte de gastos entre fechas            Probado     getExpensesByDate
  * 6  Reporte de consignaciones entre fechas    Probado     getDepositsByDate
@@ -13,7 +13,10 @@
 //Importar Modulos
 const ExpenseItem = require('../models/expense');
 const DepositItem = require('../models/deposit');
-const CashOperations = require('../models/cash_operation')
+const CashOperation = require('../models/cash_operation');
+const SellTicket = require('../models/sell_ticket');
+
+
 
 
 class CashController {
@@ -64,7 +67,8 @@ class CashController {
 
     createDeposit = async (req, res) => {
         try {
-            //let{ amount, channel, bank } = req.body;
+            //let{ amount, channel, bank, date } = req.body;
+
             const data = await DepositItem.create(req.body);
             res.status(201).json({ Info: 'Se creo la consignacion' })
         } catch (error) {
@@ -93,12 +97,12 @@ class CashController {
         try {
             let data = {};
             let open = {};
-            /**este amount_to_deposit debe ser el amount to deposit del cierre anterior menos las consinaciones
-             * hechas hasta el momneot de apertra
+            /**El amount to deposit debe se tomado del cierre del dia anterior
              */
-            let { base_amount, channel, amount_to_deposit } = req.body;
+            let { base_amount, channel } = req.body;
+
             data = { base_amount: base_amount, channel: channel, amount_to_deposit: amount_to_deposit, operation: 'open' }
-            open = await CashOperations.create(data);
+            open = await CashOperation.create(data);
             res.status(201).json(open)
         } catch (error) {
             res.status(500).json({ info: error });
@@ -106,13 +110,18 @@ class CashController {
     }
 
     closeRegister = async (req, res) => {
-        // try {
-        //     //let{ amount, channel, bank } = req.body;
-        //     const data = await DepositItem.create(req.body);
-        //     res.status(201).json({ Info: 'Se creo la consignacion' })
-        // } catch (error) {
-        //     res.status(500).json({ info: error });
-        // }
+        // 
+        /**
+         * debe recibir solo el monto de efectivo en caja y calcular:
+         * - las ventas del dia en efectivo, desla la hora de la apertura hasta la hora del cierre
+         * - Monto por consignar en la apertura
+         * - Las consignaciones desde la la hora de la apertura hasta la hora del cierre
+         * - Gastos menores desde la Hora de la apertura hasta la hora del cierre
+         * -calcular y guardar el monto de efectivo a depositar al cierre:
+         *      ventas en efectivo + monto por consignar en la apertura - consignaciones del dia
+         *      - gestos menores del dia
+         * Calcular las ventas por cada medio de pago (efectivo, debit/credit, wix)
+         */
     }
 };
 

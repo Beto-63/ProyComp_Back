@@ -9,8 +9,11 @@ const depositSchema = Schema({
     cahnnel: {
         type: String
     },
-    bank: {
+    Concept: {
         type: String
+    },
+    date: {
+        type: Date
     }
 
 }, { timestamps: true, collection: 'deposit' });
