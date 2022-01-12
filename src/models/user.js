@@ -1,13 +1,13 @@
 const { Schema, model } = require('mongoose');
 const bcrypt = require('bcrypt');
-
+//NOTA user, user_id no se requieren funcionalmente, no se si se requieran desde el punto de vista de seguridad
 const userSchema = Schema({
-    user: {
-        type: String
-    },
-    user_id: {
-        type: Number
-    },
+    // user: {
+    //     type: String
+    // },
+    // user_id: {
+    //     type: Number
+    // },
     name: {
         type: String
     },
@@ -17,20 +17,26 @@ const userSchema = Schema({
     personal_email: {
         type: String
     },
-    user_cat: [{
-        type: String,
-        enum: { values: ['admin', 'clerk'], message: '{VALUE} is not supported' }
-    }],
-    phone: {
+    phone_number: {
         type: String
     },
     password: {
         type: String
     },
+    channel: {
+        type: String
+    },
+    user_cat: [{
+        type: String,
+        enum: { values: ['admin', 'clerk'], message: '{VALUE} is not supported' }
+    }],
+
+
     status: {
         type: Number,
         default: 0,
-        enum: { values: [0, 1, 2], message: '{VALUE} is not supported' } // 0: deshabilitado, 1: activo, 2: restablecer contraseña
+        enum: { values: [0, 1, 2, 3], message: '{VALUE} is not supported' }
+        // 0: deshabilitado, 1: activo, 2: restablecer contraseña 3: Contrasena en proceso de recuperacion
     }
 }, { timestamps: true, collection: 'user' });
 

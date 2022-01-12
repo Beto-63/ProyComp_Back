@@ -6,6 +6,7 @@ const sell_ticketSchema = Schema({
     },
     products_sold: {
         type: Array
+        //este array contiene el _id del producto vendido, la cantidad vendida y el precio unitario del producto
     },
     amount_sold: {
         type: Number

@@ -4,8 +4,8 @@
  * 2. listar productos por categoria                    Probado
  * 3. listar productos por categoria y temperatura      Probado
  * 4. Modificacion de Productos                         Probado
- * 5. crear Combo                                       Probado
- * 6. modificar combo                                   Probado
+ * 5. crear Combo                                       Probado     En desarrollo
+ * 6. modificar combo                                   Probado     En desarrollo
  */
 
 // Importar Modulos

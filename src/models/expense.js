@@ -11,7 +11,10 @@ const expenseSchema = Schema({
     },
     channel: {
         type: String
-    }
+    },
+    date: {
+        type: Date
+    },
 
 }, { timestamps: true, collection: 'expense' });
 
