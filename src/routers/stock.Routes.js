@@ -12,6 +12,8 @@ class StockRouter {
         //Crear rutas
         this.router.post('/stock', objStockC.createItem);
         this.router.get('/stock', objStockC.getAllItems);
+        this.router.get('/stock/channels', objStockC.getAllChannels);
+        this.router.post('/stock/channels', objStockC.createChannel);
         this.router.post('/stock/findByName', objStockC.getItemsByName);
         this.router.post('/stock/findByNameChannel', objStockC.getItemByNameAndChannel);
         this.router.put('/stock/addQty', objStockC.addQty);

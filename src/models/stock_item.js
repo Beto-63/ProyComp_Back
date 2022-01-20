@@ -12,6 +12,7 @@ const stock_itemSchema = Schema({
     },
     status: {
         type: Number,
+        default: 1,
         enum: { values: [0, 1], message: '{VALUE} is not supported' }
     }
 

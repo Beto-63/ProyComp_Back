@@ -6,12 +6,16 @@
  * 4. Modificacion de Productos                         Probado
  * 5. crear Combo                                       Probado     En desarrollo
  * 6. modificar combo                                   Probado     En desarrollo
+ * 7. Crear Categorias de producto
+ * 8. Obtener Categorias de Producto
+ * 
  */
 
 // Importar Modulos
 const Product = require('../models/product');
 const Combo = require('../models/combo');
 const Category = require('../models/category')
+
 
 
 class ProductController {
@@ -34,7 +38,7 @@ class ProductController {
             const data = await Combo.create({ name, product_id, contents, status });
             res.status(201).json(data);
         } catch (error) {
-            res.status(500).json({ info: error }); S
+            res.status(500).json({ info: error });
         };
     };
 
@@ -103,6 +107,27 @@ class ProductController {
             res.status(400).json({ info: error });
         }
     };
+
+    selectCategories = async (req, res) => {
+        try {
+            const data = await Category.find()
+            res.status(200).json(data);
+        } catch (error) {
+            res.status(400).json({ info: error });
+        }
+    };
+
+    createCategory = async (req, res) => {
+
+        try {
+            let { name, status } = req.body;
+            //Insertar/crear una nueva categoria de Producto
+            const data = await Category.create({ name, status });
+            res.status(201).json(data);
+        } catch (error) {
+            res.status(500).json({ info: error });
+        };
+    }
 };
 
 module.exports = ProductController
