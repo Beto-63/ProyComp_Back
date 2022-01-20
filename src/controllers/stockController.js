@@ -21,7 +21,7 @@ const StockItem = require('../models/stock_item');
 const Product = require('../models/product');
 const Combo = require('../models/combo');
 const SellTicket = require('../models/sell_ticket');
-
+const Channel = require('../models/channel')
 
 
 class StockController {
@@ -40,8 +40,29 @@ class StockController {
 
     getAllItems = async (req, res) => {
         try {
-            //recuperar la lista de todos los Stock Item en la BD
+            //recuperar la lista de todoslos canales
             const data = await StockItem.find();
+            res.status(200).json(data);
+        } catch (error) {
+            res.status(400).json({ info: error });
+        };
+    }
+
+    createChannel = async (req, res) => {
+        try {
+            let { name, status } = req.body;
+            //Insertar/crear el un Canal de distribucion
+            const data = await Channel.create({ name, status });
+            res.status(201).json(data);
+        } catch (error) {
+            res.status(500).json({ info: error });
+        }
+    };
+
+    getAllChannels = async (req, res) => {
+        try {
+            //recuperar la lista de todos los Stock Item en la BD
+            const data = await Channel.find();
             res.status(200).json(data);
         } catch (error) {
             res.status(400).json({ info: error });
@@ -152,14 +173,10 @@ class StockController {
                 };
                 res.status(201).json({ info: "Descontada venta del inventario" });
             });
-
-
         } catch (error) {
             res.status(400).json({ info: error });
         }
-
     }
-
 }
 
 /**
