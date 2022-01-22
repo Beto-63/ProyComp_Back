@@ -13,9 +13,9 @@ class ProductRouter {
     #config() {
         const objProductC = new ProductController();
         //Crear rutas
-        this.router.get('/product', objProductC.selectCategories);
         this.router.post('/product', objProductC.createProduct);
         this.router.put('/product', objProductC.adjustProduct);
+        this.router.get('/product/categories', objProductC.getAllCategories);
         this.router.post('/product/category', objProductC.createCategory);
         this.router.post('/product/combo', objProductC.createCombo);
         this.router.put('/product/combo', objProductC.adjustCombo);
