@@ -108,7 +108,7 @@ class ProductController {
         }
     };
 
-    selectCategories = async (req, res) => {
+    getAllCategories = async (req, res) => {
         try {
             const data = await Category.find()
             res.status(200).json(data);
