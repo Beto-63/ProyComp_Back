@@ -9,7 +9,8 @@
  * 7. Consumo de Inventario (en linea / por venta) COMPLEJO         Pend        Ya funciona para productos NO para COMBOS
  * 8. Ajuste de Inventario (por impresicion en la preparacion)      Probado     adjustItem
  * 9. Ajuste de Item (nombre, estado)                               Probado     adjustItem
- */
+ *10. Consulta del stockItem por categoria (todas las ubicaciones) 
+*/
 
 
 
@@ -28,9 +29,9 @@ class StockController {
 
     createItem = async (req, res) => {
         try {
-            let { name, quantity, channel, status } = req.body;
+            let { name, quantity, channel, cat_name, status } = req.body;
             //Insertar/crear el Stock Item en la BD
-            const data = await StockItem.create({ name, quantity, channel, status });
+            const data = await StockItem.create({ name, quantity, channel, cat_name, status });
             res.status(201).json(data);
         } catch (error) {
             res.status(500).json({ info: error });
@@ -71,9 +72,9 @@ class StockController {
 
     adjustItem = async (req, res) => {
         try {
-            let { id, channel } = req.body;
+            let { id, channel, cat_name } = req.body;
             //Ajusta cualquier atributo del Stock Item: cantidad, status, nombre, ubicacion
-            const data = await StockItem.findOneAndUpdate({ _id: id, channel: channel }, req.body);
+            const data = await StockItem.findOneAndUpdate({ _id: id, channel: channel, cat_name: cat_name }, req.body);
             res.status(201).json(data);
         } catch (error) {
             res.status(500).json({ info: error });
@@ -90,6 +91,19 @@ class StockController {
             res.status(400).json({ info: error });
         };
     }
+
+    getItemsByCatName = async (req, res) => {
+        try {
+            let { cat_name } = req.body;
+            //recupera todos los items con el nombre especificado en todas las ubicaciones en la BD
+            const data = await StockItem.find({ cat_name: cat_name });
+            res.status(200).json(data);
+        } catch (error) {
+            res.status(400).json({ info: error });
+        };
+    }
+
+
 
     getItemByNameAndChannel = async (req, res) => {
         try {

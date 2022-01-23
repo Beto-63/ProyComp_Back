@@ -10,6 +10,9 @@ const stock_itemSchema = Schema({
     channel: {
         type: String
     },
+    cat_name: {
+        type: String
+    },
     status: {
         type: Number,
         default: 1,
