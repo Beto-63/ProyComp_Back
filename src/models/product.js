@@ -20,7 +20,7 @@ const productSchema = Schema({
     },
     temperature: {
         type: String,
-        enum: ['caliente', 'frio']
+
     },
     img_url: {
         type: String
