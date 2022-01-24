@@ -62,8 +62,8 @@ class StockController {
 
     getAllChannels = async (req, res) => {
         try {
-            //recuperar la lista de todos los Stock Item en la BD
-            const data = await Channel.find();
+            //recuperar la lista de todos los canales activos
+            const data = await Channel.find({ status: 1 });
             res.status(200).json(data);
         } catch (error) {
             res.status(400).json({ info: error });
@@ -72,9 +72,9 @@ class StockController {
 
     adjustItem = async (req, res) => {
         try {
-            let { id, channel, cat_name } = req.body;
+            let { id } = req.body;
             //Ajusta cualquier atributo del Stock Item: cantidad, status, nombre, ubicacion
-            const data = await StockItem.findOneAndUpdate({ _id: id, channel: channel, cat_name: cat_name }, req.body);
+            const data = await StockItem.findByIdAndUpdate({ _id: id }, req.body);
             res.status(201).json(data);
         } catch (error) {
             res.status(500).json({ info: error });
@@ -126,7 +126,7 @@ class StockController {
             const data = await StockItem.findOne({ name, channel });
             if (data.status == 1) {
                 data.quantity = data.quantity + qty;
-                await StockItem.findByIdAndUpdate(data._id, data);
+                await StockItem.findByIdAndUpdate({ _id: data.id }, data);
                 res.status(201).json({ info: "Actualizacion exitosa" });
             } else {
                 res.json({ Error: "El item del stock esta inactivo" })
