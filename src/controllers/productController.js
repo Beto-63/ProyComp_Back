@@ -8,7 +8,7 @@
  * 6. modificar combo                                   Probado     En desarrollo
  * 7. Crear Categorias de producto
  * 8. Obtener Categorias de Producto
- * 
+ * 9. obtener detalles del producto por nombre
  */
 
 // Importar Modulos
@@ -30,6 +30,18 @@ class ProductController {
             res.status(500).json({ info: error });
         };
     };
+
+    getProductInfo = async (req, res) => {
+        try {
+            //Obtener los detalles de un producto
+            let { name } = req.body;
+            const data = await Product.find({ name: name });
+            res.status(201).json(data);
+        } catch (error) {
+            res.status(500).json({ info: error });
+        };
+    };
+
 
     createCombo = async (req, res) => {
         try {
