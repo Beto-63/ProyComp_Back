@@ -15,6 +15,7 @@ class ProductRouter {
         //Crear rutas
         this.router.post('/product', objProductC.createProduct);
         this.router.put('/product', objProductC.adjustProduct);
+        this.router.post('/product/info', objProductC.getProductInfo);
         this.router.get('/product/categories', objProductC.getAllCategories);
         this.router.post('/product/category', objProductC.createCategory);
         this.router.post('/product/combo', objProductC.createCombo);
