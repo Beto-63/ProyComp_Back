@@ -12,12 +12,13 @@ class CashRouter {
 
         //Crear rutas
         this.router.post('/cash/expense', objCashC.createExpense);
-        this.router.post('/cash/expense/find', objCashC.getExpensesByDate);
-        this.router.get('/cash/expense', objCashC.getAllExpenses);
+        this.router.get('/cash/expense/unaccounted', objCashC.getUnAccountedExpenses);
+        this.router.post('/cash/expense/account', objCashC.setExpenseAsAccounted);
+        this.router.get('/cash/deposit/unaccounted', objCashC.getUnAccountedDeposits);
+        this.router.post('/cash/deposit/account', objCashC.setDepositsAsAccounted);
         this.router.post('/cash/deposit', objCashC.createDeposit);
-        this.router.post('/cash/deposit/find', objCashC.getDepositsByDate);
-        this.router.post('/cash/openReg', objCashC.openRegister);
-        this.router.post('/cash/openReg', objCashC.closeRegister);
+        this.router.post('/cash/deposit/find', objCashC.getDepositsByDate); // no se requeriran
+
     };
 
 }

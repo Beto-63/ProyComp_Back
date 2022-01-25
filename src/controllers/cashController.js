@@ -1,20 +1,30 @@
 /**
  * Funciones requeridas:
- * 1. Apertura de caja                          definir amount to deposit      openRegister
- * 2. Cierre de caja
- * 3. registro de consignaciones                Probar acumulado     createDeposit
- * 4. registro de gastos menores                Probado     createExpense
- * 5. Reporte de gastos entre fechas            Probado     getExpensesByDate
- * 6  Reporte de consignaciones entre fechas    Probado     getDepositsByDate
- * Generar validacion al momneto de entrar gastos o consignaciones
+ *  1. createExpense                                    Funcionando
+ *  2. getUnAccountedExpenses                           Funcionando
+ *  3. setExpensesAsAccounted                           Funcionando
+ *  4. createDeposit                                    Funcionando
+ *  5. getUnAccountedDeposits                           Funcionando
+ *  6. setDepositsAsAccounted                           Funcionando
+ *  7. getOpenTransaction
+ *  8. markLastOpenAsAccounted
+
+ *  5. getLastUnaccountedClose /si si existe (staus:1) --> Abra recupere  _id, operation, cahsonHand(-1), Amount to deposit(-1)
+ *  6. setLastCloseAsAccounted / con el id de el anterior
+ *  7. Create Open transaction
+    
+    
 
  */
 
 //Importar Modulos
 const ExpenseItem = require('../models/expense');
 const DepositItem = require('../models/deposit');
-const CashOperation = require('../models/cash_operation');
+//const ToDeposit = require('../models/to_deposit');
+const LastOperation = require('../models/last_cash_operation');
+
 const SellTicket = require('../models/sell_ticket');
+
 
 
 
@@ -23,58 +33,93 @@ class CashController {
 
     createExpense = async (req, res) => {
         try {
-            //let{ amount, concept, channel } = req.body;
+            //let{ expense_amount, description, channel, expense_type } = req.body;
             const data = await ExpenseItem.create(req.body);
             res.status(201).json({ Info: 'Se creo el gasto' })
         } catch (error) {
-            res.status(500).json({ info: error });
+            res.status(500).json({ "Error Type": error.name, "Detalle": error.message });
         }
     }
 
-    //Quitar los console log son de prueba para la expresion de las horas respecto de las 
-    // guardadas en la BD
-    getExpensesByDate = async (req, res) => {
-        //Recupera los gastos entre dos fecha/hora
+    getUnAccountedExpenses = async (req, res) => {
         try {
-            let { fechaInicial, fechaFinal } = req.body;
-            const data = await ExpenseItem.find({
-                "$and": [{
-                    "createdAt": {
-                        "$gte": fechaInicial,
-                        "$lte": fechaFinal
-                    }
-                }]
-            })
-            console.log(data[0].createdAt.toString())
-            console.log(data[0].createdAt)
-            res.status(201).json({ resultado: data })
-        } catch (error) {
-            res.status(500).json({ Info: error })
-        }
-
-    }
-
-
-    getAllExpenses = async (req, res) => {      //not needed
-        try {
-            const data = await ExpenseItem.find();
+            const data = await ExpenseItem.find({ status: 1 });
             res.status(201).json(data)
         } catch (error) {
-            res.status(500).json({ info: error });
+            res.status(500).json({ "Error Type": error.name, "Detalle": error.message });
         }
-
     }
+
+
+    setExpenseAsAccounted = async (req, res) => {
+        try {
+            let { id } = req.body
+            const data = await ExpenseItem.findByIdAndUpdate({ _id: id, status: 1 }, { status: 0 });
+            res.status(201).json(data)
+        } catch (error) {
+            res.status(500).json({ "Error Type": error.name, "Detalle": error.message });
+        }
+    }
+
+
 
     createDeposit = async (req, res) => {
         try {
-            //let{ amount, channel, bank, date } = req.body;
-
+            //let{ amount, channel } = req.body;
             const data = await DepositItem.create(req.body);
             res.status(201).json({ Info: 'Se creo la consignacion' })
         } catch (error) {
-            res.status(500).json({ info: error });
+            res.status(500).json({ "Error Type": error.name, "Detalle": error.message });
         }
     }
+
+    getUnAccountedDeposits = async (req, res) => {
+        try {
+            const data = await DepositItem.find({ status: 1 });
+            res.status(201).json(data)
+        } catch (error) {
+            res.status(500).json({ "Error Type": error.name, "Detalle": error.message });
+        }
+    }
+
+    setDepositsAsAccounted = async (req, res) => {
+        try {
+            let { id } = req.body
+            const data = await DepositItem.findOneAndUpdate({ _id: id, status: 1 }, { status: 0 });
+            res.status(201).json({ Info: "Estado cambiado" })
+        } catch (error) {
+            res.status(500).json({ "Error Type": error.name, "Detalle": error.message });
+        }
+    }
+
+    // TODO getOpenTransaction
+
+    // TODO markLastOpenAsAccounted
+
+
+    // Para el proceso de apertura
+    // TODO getLastUnaccountedClose /si si existe (staus:1) --> Abra recupere  _id, operation, cahsonHand(-1), Amount to deposit(-1)
+    // TODO setLastCloseAsAccounted / con el id de el anterior
+    // TODO Create Open transaction
+    /**
+     *      operation : 'open',
+     *      cash_on_hand : cashon hand (-1)
+     *      change_amount : lo que defina el cajero (input)
+     *      amount_to_deposit : amoun to deposit anterior - change amount actual
+     *      channel : provendra del token, pero 'Arsenal' por ahora
+     *      status: 1 por default
+     *      
+     *  */
+
+
+
+    // TODO getCloseTransaction
+
+    // TODO markLastCloseAsAccounted
+
+    // TODO 
+    // TODO 
+
 
     getDepositsByDate = async (req, res) => {
         try {
@@ -89,40 +134,8 @@ class CashController {
             })
             res.status(201).json({ resultado: data })
         } catch (error) {
-            res.status(500).json({ Info: error })
+            res.status(500).json({ "Error Type": error.name, "Detalle": error.message })
         }
     }
-
-    openRegister = async (req, res) => {
-        try {
-            let data = {};
-            let open = {};
-            /**El amount to deposit debe se tomado del cierre del dia anterior
-             */
-            let { base_amount, channel } = req.body;
-
-            data = { base_amount: base_amount, channel: channel, amount_to_deposit: amount_to_deposit, operation: 'open' }
-            open = await CashOperation.create(data);
-            res.status(201).json(open)
-        } catch (error) {
-            res.status(500).json({ info: error });
-        }
-    }
-
-    closeRegister = async (req, res) => {
-        // 
-        /**
-         * debe recibir solo el monto de efectivo en caja y calcular:
-         * - las ventas del dia en efectivo, desla la hora de la apertura hasta la hora del cierre
-         * - Monto por consignar en la apertura
-         * - Las consignaciones desde la la hora de la apertura hasta la hora del cierre
-         * - Gastos menores desde la Hora de la apertura hasta la hora del cierre
-         * -calcular y guardar el monto de efectivo a depositar al cierre:
-         *      ventas en efectivo + monto por consignar en la apertura - consignaciones del dia
-         *      - gestos menores del dia
-         * Calcular las ventas por cada medio de pago (efectivo, debit/credit, wix)
-         */
-    }
-};
-
+}
 module.exports = CashController;

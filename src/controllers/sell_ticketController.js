@@ -4,7 +4,7 @@ class Sell_ticketController {
     getAllTickets = (req, res) => {
         Sell_ticket.find({}, (error, data) => {
             if (error) {
-                res.status(500).json({ info: error });
+                res.status(500).json({ "Error Type": error.name, "Detalle": error.message });
             } else {
                 res.status(200).json(data);
             }
@@ -15,11 +15,11 @@ class Sell_ticketController {
         let fechaFinal = req.body.fechaFinal;
         Sell_ticket.find({
             "$and": [{
-                "createdAt":{
+                "createdAt": {
                     "$gte": fechaInicial,
                     "$lte": fechaFinal
-                }     
-        }]
+                }
+            }]
         }, (error, data) => {
             if (error) {
                 res.status(500).json({ messaje: error })
@@ -30,12 +30,12 @@ class Sell_ticketController {
 
     }
 
-    getTicketById = (req,res)=>{
+    getTicketById = (req, res) => {
         const id = req.params.id;
-        Sell_ticket.findById(id, (error, data)=>{
-            if (error){
-                res.status(500).json({info: error})
-            }else{
+        Sell_ticket.findById(id, (error, data) => {
+            if (error) {
+                res.status(500).json({ "Error Type": error.name, "Detalle": error.message })
+            } else {
                 res.status(200).json(data)
             }
         })
@@ -44,7 +44,7 @@ class Sell_ticketController {
         let objSellTicket = req.body;
         Sell_ticket.create(objSellTicket, (error, data) => {
             if (error) {
-                res.status(500).json({ info: error });
+                res.status(500).json({ "Error Type": error.name, "Detalle": error.message });
             } else {
                 res.status(201).json({ message: 'Ticket Creado' })
             }
