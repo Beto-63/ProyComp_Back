@@ -1,128 +1,169 @@
 /**
  * Funciones requeridas:
- * 1. Apertura de caja                          definir amount to deposit      openRegister
- * 2. Cierre de caja
- * 3. registro de consignaciones                Probar acumulado     createDeposit
- * 4. registro de gastos menores                Probado     createExpense
- * 5. Reporte de gastos entre fechas            Probado     getExpensesByDate
- * 6  Reporte de consignaciones entre fechas    Probado     getDepositsByDate
- * Generar validacion al momneto de entrar gastos o consignaciones
-
+ *  1. createExpense                                    Funcionando
+ *  2. getUnAccountedExpenses                           Funcionando
+ *  3. setExpensesAsAccounted                           Funcionando
+ *  4. createDeposit                                    Funcionando
+ *  5. getUnAccountedDeposits                           Funcionando
+ *  6. setDepositsAsAccounted                           Funcionando
+ *  7. getLastOpenTransaction                           Funcionando
+ *  8 .setLastOpenAsAccounted                           Funcionando
+ *  9. setTransaction (puede ser open or close)         Funcionando
+ * 10. getLastCloseTransaction                          Funcionando
+ * 11. setLastCloseAsAccounted                          Funcionando
+ * 13. getAllUnaccoutedSellTicks                        Funcionando
+ * 14. setSellTicketAs Accounted                        Funcionando
  */
 
-//Importar Modulos
+//Importar Modelos
 const ExpenseItem = require('../models/expense');
 const DepositItem = require('../models/deposit');
-const CashOperation = require('../models/cash_operation');
+const LastOperation = require('../models/last_operation');
 const SellTicket = require('../models/sell_ticket');
-
-
-
 
 class CashController {
 
     createExpense = async (req, res) => {
+        //Crea los reportes de gastos menores con status:1 por default de la base de datos
         try {
-            //let{ amount, concept, channel } = req.body;
+            //let{ expense_amount, description, channel, expense_type } = req.body;
             const data = await ExpenseItem.create(req.body);
             res.status(201).json({ Info: 'Se creo el gasto' })
         } catch (error) {
-            res.status(500).json({ info: error });
+            res.status(500).json({ "Error Type": error.name, "Detalle": error.message });
         }
     }
 
-    //Quitar los console log son de prueba para la expresion de las horas respecto de las 
-    // guardadas en la BD
-    getExpensesByDate = async (req, res) => {
-        //Recupera los gastos entre dos fecha/hora
+    getUnAccountedExpenses = async (req, res) => {
+        //Retorna la lista de gastos no contados en un cierre de caja
         try {
-            let { fechaInicial, fechaFinal } = req.body;
-            const data = await ExpenseItem.find({
-                "$and": [{
-                    "createdAt": {
-                        "$gte": fechaInicial,
-                        "$lte": fechaFinal
-                    }
-                }]
-            })
-            console.log(data[0].createdAt.toString())
-            console.log(data[0].createdAt)
-            res.status(201).json({ resultado: data })
-        } catch (error) {
-            res.status(500).json({ Info: error })
-        }
-
-    }
-
-
-    getAllExpenses = async (req, res) => {      //not needed
-        try {
-            const data = await ExpenseItem.find();
+            const data = await ExpenseItem.find({ status: 1 });
             res.status(201).json(data)
         } catch (error) {
-            res.status(500).json({ info: error });
+            res.status(500).json({ "Error Type": error.name, "Detalle": error.message });
         }
+    }
 
+    setExpenseAsAccounted = async (req, res) => {
+        //Los gastos que se cuentan en un cierre se dan por contados status:0
+        try {
+            let { id } = req.body
+            const data = await ExpenseItem.findOneAndUpdate({ _id: id, status: 1 }, { status: 0 });
+            res.status(201).json(data)
+        } catch (error) {
+            res.status(500).json({ "Error Type": error.name, "Detalle": error.message });
+        }
     }
 
     createDeposit = async (req, res) => {
+        //Crea los reportes de consignacion con status:1 por default de la base de datos
         try {
-            //let{ amount, channel, bank, date } = req.body;
-
+            //let{ amount, channel } = req.body;
             const data = await DepositItem.create(req.body);
             res.status(201).json({ Info: 'Se creo la consignacion' })
         } catch (error) {
-            res.status(500).json({ info: error });
+            res.status(500).json({ "Error Type": error.name, "Detalle": error.message });
         }
     }
 
-    getDepositsByDate = async (req, res) => {
+    getUnAccountedDeposits = async (req, res) => {
+        //Retorna la lista de consignaciones no contados en un cierre de caja
         try {
-            let { fechaInicial, fechaFinal } = req.body;
-            const data = await DepositItem.find({
-                "$and": [{
-                    "createdAt": {
-                        "$gte": fechaInicial,
-                        "$lte": fechaFinal
-                    }
-                }]
-            })
-            res.status(201).json({ resultado: data })
+            const data = await DepositItem.find({ status: 1 });
+            res.status(201).json(data)
         } catch (error) {
-            res.status(500).json({ Info: error })
+            res.status(500).json({ "Error Type": error.name, "Detalle": error.message });
         }
     }
 
-    openRegister = async (req, res) => {
+    setDepositsAsAccounted = async (req, res) => {
+        //Las consignaciones que se cuentan en un cierre se dan por contadas status:0
         try {
-            let data = {};
-            let open = {};
-            /**El amount to deposit debe se tomado del cierre del dia anterior
-             */
-            let { base_amount, channel } = req.body;
-
-            data = { base_amount: base_amount, channel: channel, amount_to_deposit: amount_to_deposit, operation: 'open' }
-            open = await CashOperation.create(data);
-            res.status(201).json(open)
+            let { id } = req.body
+            const data = await DepositItem.findOneAndUpdate({ _id: id, status: 1 }, { status: 0 });
+            res.status(201).json({ Info: "Estado cambiado" })
         } catch (error) {
-            res.status(500).json({ info: error });
+            res.status(500).json({ "Error Type": error.name, "Detalle": error.message });
         }
     }
 
-    closeRegister = async (req, res) => {
-        // 
-        /**
-         * debe recibir solo el monto de efectivo en caja y calcular:
-         * - las ventas del dia en efectivo, desla la hora de la apertura hasta la hora del cierre
-         * - Monto por consignar en la apertura
-         * - Las consignaciones desde la la hora de la apertura hasta la hora del cierre
-         * - Gastos menores desde la Hora de la apertura hasta la hora del cierre
-         * -calcular y guardar el monto de efectivo a depositar al cierre:
-         *      ventas en efectivo + monto por consignar en la apertura - consignaciones del dia
-         *      - gestos menores del dia
-         * Calcular las ventas por cada medio de pago (efectivo, debit/credit, wix)
-         */
+    getLastOpenTransaction = async (req, res) => {
+        //Retorna, si esta vigente(status:1) , la ultima transaccion de apertura
+        //Tiene que existir para proceder con un cierre 
+        try {
+            const data = await LastOperation.findOne({ operation: 'open', status: 1 });
+            res.status(201).json(data)
+        } catch (error) {
+            res.status(500).json({ "Error Type": error.name, "Detalle": error.message });
+        }
     }
-};
+
+    setLastOpenAsAccounted = async (req, res) => {
+        //Al proceder a registrar un cierre se requiere des habilitar el registro de la ultima Apertura 
+        try {
+            let { id } = req.body
+            const data = await LastOperation.findOneAndUpdate({ _id: id, status: 1, operation: 'open' }, { status: 0 });
+            res.status(201).json({ Info: "Estado cambiado" })
+        } catch (error) {
+            res.status(500).json({ "Error Type": error.name, "Detalle": error.message });
+        }
+    }
+
+    setTransaction = async (req, res) => {
+        //Registra las apertura y cierres con status:1 por default.
+        //Si llega con close será para el cierre, si llega con open será para la apertura
+        //let {operation, amount_to_deposit, cash_on_hand, change_amount, channel} = req.body;
+        try {
+            const data = await LastOperation.create(req.body);
+            res.status(201).json({ Info: `${data.operation} exitoso` })
+        } catch (error) {
+            res.status(500).json({ "Error Type": error.name, "Detalle": error.message });
+        }
+    }
+
+    getLastCloseTransaction = async (req, res) => {
+        //Retorna, si esta vigente(status:1) , la ultima transaccion de cierre
+        //Tiene que existir para proceder con una apertura
+        try {
+            const data = await LastOperation.findOne({ operation: 'close', status: 1 });
+            res.status(201).json(data)
+        } catch (error) {
+            res.status(500).json({ "Error Type": error.name, "Detalle": error.message });
+        }
+    }
+
+    setLastCloseAsAccounted = async (req, res) => {
+        //Al proceder a registrar una apertura se requiere des habilitar el registro del ultimo Cierre 
+        try {
+            let { id } = req.body
+            const data = await LastOperation.findOneAndUpdate({ _id: id, status: 1, operation: 'close' }, { status: 0 });
+            res.status(201).json({ Info: "Estado cambiado" })
+        } catch (error) {
+            res.status(500).json({ "Error Type": error.name, "Detalle": error.message });
+        }
+    }
+
+    getUnAccoutedSellTickets = async (req, res) => {
+        //Retorna la lista tickets de venta No contados en un cierre de caja es decir con status:1
+        try {
+            const data = await SellTicket.find({ status: 1 });
+            res.status(201).json(data)
+        } catch (error) {
+            res.status(500).json({ "Error Type": error.name, "Detalle": error.message });
+        }
+    }
+
+    setSellTicketAsAccounted = async (req, res) => {
+        //Los tickets de venta que se cuentan en un cierre se dan por contados status:0
+        try {
+            let { id } = req.body
+            const data = await SellTicket.findOneAndUpdate({ _id: id, status: 1 }, { status: 0 });
+            res.status(201).json({ Info: 'Se hizo el cambio' })
+        } catch (error) {
+            res.status(500).json({ "Error Type": error.name, "Detalle": error.message });
+        }
+    }
+
+}
 
 module.exports = CashController;

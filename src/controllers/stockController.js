@@ -34,7 +34,7 @@ class StockController {
             const data = await StockItem.create({ name, quantity, channel, cat_name, status });
             res.status(201).json(data);
         } catch (error) {
-            res.status(500).json({ info: error });
+            res.status(500).json({ "Error Type": error.name, "Detalle": error.message });
         }
     };
 
@@ -45,7 +45,7 @@ class StockController {
             const data = await StockItem.find();
             res.status(200).json(data);
         } catch (error) {
-            res.status(400).json({ info: error });
+            res.status(400).json({ "Error Type": error.name, "Detalle": error.message });
         };
     }
 
@@ -56,7 +56,7 @@ class StockController {
             const data = await Channel.create({ name, status });
             res.status(201).json(data);
         } catch (error) {
-            res.status(500).json({ info: error });
+            res.status(500).json({ "Error Type": error.name, "Detalle": error.message });
         }
     };
 
@@ -66,7 +66,7 @@ class StockController {
             const data = await Channel.find({ status: 1 });
             res.status(200).json(data);
         } catch (error) {
-            res.status(400).json({ info: error });
+            res.status(400).json({ "Error Type": error.name, "Detalle": error.message });
         };
     }
 
@@ -77,7 +77,7 @@ class StockController {
             const data = await StockItem.findByIdAndUpdate({ _id: id }, req.body);
             res.status(201).json(data);
         } catch (error) {
-            res.status(500).json({ info: error });
+            res.status(500).json({ "Error Type": error.name, "Detalle": error.message });
         };
     }
 
@@ -88,7 +88,7 @@ class StockController {
             const data = await StockItem.find({ name: name });
             res.status(200).json(data);
         } catch (error) {
-            res.status(400).json({ info: error });
+            res.status(400).json({ "Error Type": error.name, "Detalle": error.message });
         };
     }
 
@@ -99,7 +99,7 @@ class StockController {
             const data = await StockItem.find({ cat_name: cat_name });
             res.status(200).json(data);
         } catch (error) {
-            res.status(400).json({ info: error });
+            res.status(400).json({ "Error Type": error.name, "Detalle": error.message });
         };
     }
 
@@ -116,7 +116,7 @@ class StockController {
                 res.json({ Error: "El item del stock esta inactivo" })
             }
         } catch (error) {
-            res.status(400).json({ info: error });
+            res.status(400).json({ "Error Type": error.name, "Detalle": error.message });
         }
     }
 
@@ -132,7 +132,7 @@ class StockController {
                 res.json({ Error: "El item del stock esta inactivo" })
             }
         } catch (error) {
-            res.status(400).json({ info: error });
+            res.status(400).json({ "Error Type": error.name, "Detalle": error.message });
         };
     }
 
@@ -152,7 +152,7 @@ class StockController {
                 res.json({ Error: "El item del stock esta inactivo" })
             }
         } catch (error) {
-            res.status(400).json({ info: error });
+            res.status(400).json({ "Error Type": error.name, "Detalle": error.message });
         }
     }
 
@@ -188,7 +188,7 @@ class StockController {
                 res.status(201).json({ info: "Descontada venta del inventario" });
             });
         } catch (error) {
-            res.status(400).json({ info: error });
+            res.status(400).json({ "Error Type": error.name, "Detalle": error.message });
         }
     }
 }

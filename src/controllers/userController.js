@@ -13,7 +13,7 @@ class UserController {
             const users = await User.find();
             return res.status(200).json(users);
         } catch (error) {
-            return res.status(400).json({ info: error });
+            return res.status(400).json({ "Error Type": error.name, "Detalle": error.message });
         }
 
     }
@@ -33,7 +33,7 @@ class UserController {
             }
 
             return res.status(200).json(user);
-            
+
         } catch (error) {
             return res.status(400).json({ error: error.message });
         }
@@ -46,17 +46,17 @@ class UserController {
         try {
 
             //return res.status(200).json({ message: 'Register' });
-    
-            const {nick, email, password, user_cat} = req.body;
+
+            const { nick, email, password, user_cat } = req.body;
 
             // Validar si el usuario ya existe, antes de guardar
-            const nickFound = await User.findOne({nick: nick});
-            if(nickFound){
-                return res.status(400).json({message: 'Este nick ya existe'});
+            const nickFound = await User.findOne({ nick: nick });
+            if (nickFound) {
+                return res.status(400).json({ message: 'Este nick ya existe' });
             }
-            const emailFound = await User.findOne({email: email});
-            if(emailFound){
-                return res.status(400).json({message: 'El email ya existe'});
+            const emailFound = await User.findOne({ email: email });
+            if (emailFound) {
+                return res.status(400).json({ message: 'El email ya existe' });
             }
 
 
@@ -71,36 +71,36 @@ class UserController {
 
 
             //TODO - Gestion / verificación de user_cat aquí
-            if(user_cat != null){
+            if (user_cat != null) {
 
                 //Validar si los user_cat dados en el formulario son validos o no
 
                 // Buscar de todos los 'name' de la colección 'user_cat', 
                 // si en uno de ellos '$in', existe el rol que me envió el usuario por req.body
-                const foundRoles = await user_catModel.find({name: {$in: user_cat}});
+                const foundRoles = await user_catModel.find({ name: { $in: user_cat } });
                 //console.log('foundRoles: ',foundRoles);
-        
-                if(foundRoles != null && foundRoles != ''){
-        
+
+                if (foundRoles != null && foundRoles != '') {
+
                     // Guardar arreglo de los roles encontrados, pero solo los id's
                     // map: quiero recorrer cada uno de los objetos
                     // y por cada objeto, solo quiero obtener el _id
                     //newUser.roles = foundRoles.map(role => role._id);
                     newUser.user_cat = foundRoles.map(role => role.name);
-        
-                }else{
-        
+
+                } else {
+
                     // Se asigna el rol predeterminado 'user'
-                    const role = await user_catModel.findOne({name: "clerk"}); // findOne devuelve un solo objeto
+                    const role = await user_catModel.findOne({ name: "clerk" }); // findOne devuelve un solo objeto
                     //newUser.roles = [role._id]; // [ ] array con el id del rol 'user'
                     newUser.user_cat = [role.name];
 
                 }
 
-            }else{ // Si el usuario no ingresó ningún rol
-        
+            } else { // Si el usuario no ingresó ningún rol
+
                 // Se asigna el rol predeterminado 'clerk'
-                const role = await user_catModel.findOne({name: "clerk"}); // findOne devuelve un solo objeto
+                const role = await user_catModel.findOne({ name: "clerk" }); // findOne devuelve un solo objeto
 
                 //newUser.roles = [role._id]; // [ ] array con el id del rol 'user'
                 newUser.user_cat = [role.name];
@@ -113,7 +113,7 @@ class UserController {
             return res.status(201).json({ message: 'Usuario creado correctamente', savedUser });
 
         } catch (error) {
-            return res.status(401).json({message: 'Error al hacer register', error});
+            return res.status(401).json({ message: 'Error al hacer register', error });
         }
 
     }
@@ -124,13 +124,13 @@ class UserController {
         try {
 
             const { id } = req.params;
-            
-            const {nick, email, password, user_cat} = req.body;
+
+            const { nick, email, password, user_cat } = req.body;
 
             // Se valida si existe un suario con este id
             const response = await User.findById(id);
-            if(response == null){
-                return res.status(400).json({message: 'Usuario no encontrado para editar'});
+            if (response == null) {
+                return res.status(400).json({ message: 'Usuario no encontrado para editar' });
             }
 
             // encriptando la contraseña
@@ -142,22 +142,22 @@ class UserController {
                 nick: nick,
                 email: email,
                 password: encryptedPassword
-            }, {new: true});
+            }, { new: true });
 
 
             //TODO - Gestion / verificación de user_cat aquí
-            if(user_cat != null){
+            if (user_cat != null) {
                 //console.log('llego hasta aqui')
 
                 //Validar si los user_cat dados en el formulario son validos o no
 
                 // Buscar de todos los 'name' de la colección 'user_cat', 
                 // si en uno de ellos '$in', existe el rol que me envió el usuario por req.body
-                const foundRoles = await user_catModel.find({name: {$in: user_cat}});
+                const foundRoles = await user_catModel.find({ name: { $in: user_cat } });
                 //console.log('foundRoles: ',foundRoles);
-        
-                if(foundRoles != null && foundRoles != ''){
-        
+
+                if (foundRoles != null && foundRoles != '') {
+
                     // Guardar arreglo de los roles encontrados, pero solo los id's
                     // map: quiero recorrer cada uno de los objetos
                     // y por cada objeto, solo quiero obtener el _id
@@ -170,33 +170,33 @@ class UserController {
 
                     await User.findByIdAndUpdate(id, {
                         user_cat: user_cat
-                    }, {new: true});
-        
-                }else{
-        
+                    }, { new: true });
+
+                } else {
+
                     // Se asigna el rol predeterminado 'clerk'
-                    const role = await user_catModel.findOne({name: "clerk"}); // findOne devuelve un solo objeto
+                    const role = await user_catModel.findOne({ name: "clerk" }); // findOne devuelve un solo objeto
                     //newUser.roles = [role._id]; // [ ] array con el id del rol 'user'
                     const user_cat = [role.name];
                     //console.log(updatedUser.user_cat)
 
                     await User.findByIdAndUpdate(id, {
                         user_cat: user_cat
-                    }, {new: true});
+                    }, { new: true });
 
                 }
 
-            }else{ // Si el usuario no ingresó ningún rol
-        
+            } else { // Si el usuario no ingresó ningún rol
+
                 // Se asigna el rol predeterminado 'clerk'
-                const role = await user_catModel.findOne({name: "clerk"}); // findOne devuelve un solo objeto
+                const role = await user_catModel.findOne({ name: "clerk" }); // findOne devuelve un solo objeto
 
                 //newUser.roles = [role._id]; // [ ] array con el id del rol 'user'
                 const user_cat = [role.name];
 
                 await User.findByIdAndUpdate(id, {
                     user_cat: user_cat
-                }, {new: true});
+                }, { new: true });
 
             };
 
@@ -209,7 +209,7 @@ class UserController {
             return res.status(201).json({ message: 'Usuario actualizado correctamente' /*, updatedUser*/ });
 
         } catch (error) {
-            return res.status(401).json({message: 'Error al hacer updateUser', error});
+            return res.status(401).json({ message: 'Error al hacer updateUser', error });
         }
 
     }

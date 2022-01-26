@@ -17,7 +17,7 @@ class UserController {
         if (decode) {
             User.find((error, data) => {
                 if (error) {
-                    res.status(500).json({ info: error });
+                    res.status(500).json({ "Error Type": error.name, "Detalle": error.message });
                 } else {
                     res.status(201).json(data);
                 }
@@ -47,7 +47,7 @@ class UserController {
         if (decode) {
             User.create({ nick, email, password, user_cat }, (error, data) => {
                 if (error) {
-                    res.status(500).json({ info: error });
+                    res.status(500).json({ "Error Type": error.name, "Detalle": error.message });
                 } else {
                     res.status(201).json(data);
                 }
