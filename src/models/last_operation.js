@@ -1,6 +1,6 @@
 const { Schema, model } = require('mongoose');
 
-const lastOperationSchema = Schema({
+const last_operationSchema = Schema({
 
 
     operation: {
@@ -28,12 +28,12 @@ const lastOperationSchema = Schema({
 
 }, { timestamps: true, collection: 'last_cash_operation' });
 
-module.exports = model('LastOperation', lastOperationSchema);
+module.exports = model('LastOperation', last_operationSchema);
 
 /**
  * Aqui se registra la apertura y cierre de cada dia.
  * Al hacer una apertura:
- *      Se toman los datos de cierre de Cash on hand, y to-deposit y
+ *      Se toman los datos de cierre de Cash on hand, y to-deposit del cierre anterior y
  *      Se da status de 0 al ultimo cierre
  *      (SI HAY UN REGISTRO ANTERIOR DE APERTURA status=1 UNO NO PERMITO 
  *      UNA NUEVA APERTURA)

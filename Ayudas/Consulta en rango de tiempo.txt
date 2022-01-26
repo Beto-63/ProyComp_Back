@@ -1,0 +1,18 @@
+
+    getDepositsByDate = async (req, res) => {
+        try {
+            let { fechaInicial, fechaFinal } = req.body;
+            const data = await DepositItem.find({
+                "$and": [{
+                    "createdAt": {
+                        "$gte": fechaInicial,
+                        "$lte": fechaFinal
+                    }
+                }]
+            })
+            res.status(201).json({ resultado: data })
+        } catch (error) {
+            res.status(500).json({ "Error Type": error.name, "Detalle": error.message })
+        }
+    }
+}

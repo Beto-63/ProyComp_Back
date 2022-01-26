@@ -13,7 +13,7 @@ const bankDepositSchema = Schema({
         type: Number,
         default: 1,
         enum: { values: [0, 1], message: '{VALUE} is not supported' }
-    },
+    }
 
 
 }, { timestamps: true, collection: 'deposit' });

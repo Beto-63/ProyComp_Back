@@ -19,6 +19,11 @@ const sell_ticketSchema = Schema({
     },
     user_id: {
         type: String
+    },
+    status: {
+        type: Number,
+        default: 1,
+        enum: { values: [0, 1], message: '{VALUE} is not supported' }
     }
 }, { timestamps: true, collection: 'sell_ticket' });
 
