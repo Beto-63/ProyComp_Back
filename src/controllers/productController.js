@@ -34,8 +34,8 @@ class ProductController {
     getProductInfo = async (req, res) => {
         try {
             //Obtener los detalles de un producto
-            let { name } = req.body;
-            const data = await Product.find({ name: name });
+            //let { name } = req.body;
+            const data = await Product.findOne(req.body);
             res.status(201).json(data);
         } catch (error) {
             res.status(500).json({ "Error Type": error.name, "Detalle": error.message });
@@ -119,6 +119,17 @@ class ProductController {
             res.status(400).json({ "Error Type": error.name, "Detalle": error.message });
         }
     };
+
+    getProductsByCatName = async (req, res) => {
+        try {
+            let { cat_name } = req.body;
+            //recupera todos los items con el nombre especificado en todas las ubicaciones en la BD
+            const data = await Product.find({ cat_name: cat_name });
+            res.status(200).json(data);
+        } catch (error) {
+            res.status(400).json({ "Error Type": error.name, "Detalle": error.message });
+        };
+    }
 
     getAllCategories = async (req, res) => {
         try {
