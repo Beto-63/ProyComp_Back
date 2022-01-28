@@ -1,22 +1,65 @@
 - Plantilla de routes:
 
+                                STOCK_ITEM
+    /stock POST -> Crea los elementos Inventariables;
+    /stock' GET  Obtiene la lista de todos los elementos Inventariables
+    /stock/channels GETv-> Retorna la lista de ubicaciones
+    /stock/channels POST -> Crea una ubicacion 
+    /stock/findByName POST -> Retorna los elementos seleccionados por nombre
+    /stock/findByCatName POST -> Retorna los elementos seleccionados por categoria
+    /stock/findByNameChannel POST -> Retorna los elementos que coincidan con nombre y categoria 
+    /stock/addQty PUT -> Adiciona cantidad a un elemento inventariable;
+    /stock/adjust PUT -> Corrije los campos de un elemento inventariable excepto cantidad;
+    /stock/transfer PUT -> Ajusta la cantidad del elemento, y registra el motivo del ajuste;
+    /stock PUT -> Dispara el proceo de descontar del inventario de manera ad-hoc;
+
+
+    TENEMOS QUE REVISAR ALGUNAS DUPLICACIONES ENTRE RODRIGO Y ALBERTO
+
+                                PRODUCT
     /producto GET -> Todas
     /producto POST -> Crear
+    /product POST -> Crear
     /producto/:id GET -> Ver uno solo por id o nombre
+    /product/info POST -> Retorna detalles de un producto;
     /producto/find POST -> Consulta con varios criterios de busqueda (req.body)
     /producto/:id PUT -> Editar uno solo por id / cambiar estado
+    /product PUT -> Corregir producto
+,
+    /product/categories GET -> Retorna las categorias(sirve para stock_item y para product)
+    /product/findByCatName POST -> Retorna los productos selleccionados por categoria DUPLICADO??
+    /product/category POST -> crea categorias de producto
+    /product/combo POST -> CreaCombo POR REVISAR
+    /product/combo PUT ->  Ajusta Combo POR REVISAR
+    /product/selectCat POST -> , Retorna productos por categoria; DUPLICADO??
+    /product/selectCatTemp POST -> retorna productos por categoria y por temperatura;
 
-    Sell Ticket
+                            SELL_TICKET
     /sell_ticket GET -> Todos los tickets
     /sell_ticket/date GET -> Obtener los tickets por rango de fechas se debe consultar así: {"fechaInicial": "2021-12-27", "fechaFinal": "2021-12-28T23:59:59.999Z"} (req.body)
     /sell_ticket/:id GET -> Obtener ticket por id (req.params)
     /sell_ticket POST -> crear ticket (req.body)
 
-    Client
+                            CLIENT
     /client GET -> Obtener todos los clientes (req.body)
     /client/:id GET -> Clientes por Id (req.params)
     /client POST -> crear Cliente (req.body)
     /client/update PUT -> Actualizar cliente, se debe poner como primer campo el _id (req.body)
+
+                            CASH
+    /cash/expense POST -> Crea un gasto
+    /cash/expense/unaccounted GET -> recupera los gastos no "contabilizados"
+    /cash/expense/account POST -> Marca como "contabilizados" los gastos
+    /cash/deposit/unaccounted GET -> recupera las consignaciones no "contabilizadss"
+    /cash/deposit/account POST -> Marca como "contabilizadas" las consignaciones"
+    /cash/deposit POST -> Crea una consignacion
+    /cash/lastOpen GET -> recupera la ultima transaccion de apertura                            VALIDAR CON ABAJO
+    /cash/lastOpen/account POST -> cambia el status a 0, de la ultima operacion de apertura
+    /cash/last/transaction POST -> Crea una operacion de apertura/cierre con status 1 
+    /cash/lastClose GET', objCashC.getLastCloseTransaction);
+    /cash/lastClose/account POST -> cambia el status a 0, de la ultima operacion de cierre
+    /cash/sellTickets/unaccounted GET -> recupera la ultima transaccion de cierre               VALIDAR CON ARRIBA
+    /cash/sellTicket/account POST -> Cambia el status a 0, de la cada operacion de venta una ves es "contabilizada"
 
 - Codigos de respuesta HTTP de la API:
 
