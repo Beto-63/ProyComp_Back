@@ -1,16 +1,18 @@
 /**
  * Funciones requeridas:
  * 1. Ceracion de Stock Items                                       Probado     createItem
- * 2. Adicion de cantidad a stock (cantidad y ubicacion)            Probado     addQty
- * 3. Consulta de todod los stock items                             Probado     getAllItems 
- * 4. Consulta del stockItem por Nombre (todas las ubicaciones)     Probado     getItemByName        
- * 5. Consulta de stock Item por nombre y por channel (ubicacion)   Probado     getItemByChannelId  
- * 6. Traslado de cantidad de un stock item entre ubicaciones       Probado     transferQty
- * 7. Consumo de Inventario (en linea / por venta) COMPLEJO         Pend        Ya funciona para productos NO para COMBOS
- * 8. Ajuste de Inventario (por impresicion en la preparacion)      Probado     adjustItem
- * 9. Ajuste de Item (nombre, estado)                               Probado     adjustItem
- *10. Consulta del stockItem por categoria (todas las ubicaciones) 
-*/
+ * 2. Consultar todos los Items                                     Probado     getAllItems
+ * 3. Consultar todos los Canales                                   Probado     getAllChannels
+ * 4. Crea un canal                                                 PROBAR      createChannel
+ * 5. Consulta de stockItems por Nombre (todas las ubicaciones)     Probado     getItemByName   
+ * 6. Consulta de StockItems por categoria                          Probado     getItemsByCatName      
+ * 7. Consulta de stockItem por nombre y por channel (ubicacion)   Probado     getItemByNameAndChannel 
+ * 8. Consulta de stockItems por cat_name y por channel             FALTA       getItemByCatAndChannel
+ * 9. Adicion de cantidad a stock (cantidad y ubicacion)            Probado     addQty
+ *10. Ajuste de Item (excepto cantidad o cantidad/ ambos casos)     Probado     adjustItem
+ *11. Traslado de cantidad de un stock item entre ubicaciones       Probado     transferQty
+ *12. Consumo de Inventario (en linea / por venta) COMPLEJO             EN DEFINICION
+ */
 
 
 
@@ -115,6 +117,17 @@ class StockController {
             } else {
                 res.json({ Error: "El item del stock esta inactivo" })
             }
+        } catch (error) {
+            res.status(400).json({ "Error Type": error.name, "Detalle": error.message });
+        }
+    };
+
+    getItemByCatNameAndChannel = async (req, res) => {
+        try {
+            let { cat_name, channel } = req.body;
+            //retona los Stock Items que conicidan la categoria y una especifica ubicacion en la BD
+            const data = await StockItem.find({ cat_name: cat_name, channel: channel });
+            res.status(201).json(data);
         } catch (error) {
             res.status(400).json({ "Error Type": error.name, "Detalle": error.message });
         }
