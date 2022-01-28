@@ -17,7 +17,7 @@ class ProductRouter {
         this.router.put('/product', objProductC.adjustProduct);
         this.router.post('/product/info', objProductC.getProductInfo);
         this.router.get('/product/categories', objProductC.getAllCategories);
-        this.router.get('/product/findByCatName', objProductC.getProductsByCatName);
+        this.router.post('/product/findByCatName', objProductC.getProductsByCatName);
         this.router.post('/product/category', objProductC.createCategory);
         this.router.post('/product/combo', objProductC.createCombo);
         this.router.put('/product/combo', objProductC.adjustCombo);
