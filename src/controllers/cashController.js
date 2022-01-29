@@ -91,7 +91,7 @@ class CashController {
         //Retorna, si esta vigente(status:1) , la ultima transaccion de apertura
         //Tiene que existir para proceder con un cierre 
         try {
-            const data = await LastOperation.findOne({ operation: 'open', status: 1 });
+            const data = await LastOperation.findOne({ operation: 'open' });
             res.status(201).json(data)
         } catch (error) {
             res.status(500).json({ "Error Type": error.name, "Detalle": error.message });
@@ -125,7 +125,7 @@ class CashController {
         //Retorna, si esta vigente(status:1) , la ultima transaccion de cierre
         //Tiene que existir para proceder con una apertura
         try {
-            const data = await LastOperation.findOne({ operation: 'close', status: 1 });
+            const data = await LastOperation.findOne({ operation: 'close' });
             res.status(201).json(data)
         } catch (error) {
             res.status(500).json({ "Error Type": error.name, "Detalle": error.message });
