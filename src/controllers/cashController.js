@@ -48,7 +48,7 @@ class CashController {
         //Los gastos que se cuentan en un cierre se dan por contados status:0
         try {
             let { id } = req.body
-            const data = await ExpenseItem.findOneAndUpdate({ _id: id, status: 1 }, { status: 0 });
+            const data = await ExpenseItem.findByIdAndUpdate({ _id: id }, { status: 0 });
             res.status(201).json(data)
         } catch (error) {
             res.status(500).json({ "Error Type": error.name, "Detalle": error.message });
@@ -80,7 +80,7 @@ class CashController {
         //Las consignaciones que se cuentan en un cierre se dan por contadas status:0
         try {
             let { id } = req.body
-            const data = await DepositItem.findOneAndUpdate({ _id: id, status: 1 }, { status: 0 });
+            const data = await DepositItem.findByIdAndUpdate({ _id: id }, { status: 0 });
             res.status(201).json({ Info: "Estado cambiado" })
         } catch (error) {
             res.status(500).json({ "Error Type": error.name, "Detalle": error.message });
@@ -102,7 +102,7 @@ class CashController {
         //Al proceder a registrar un cierre se requiere des habilitar el registro de la ultima Apertura 
         try {
             let { id } = req.body
-            const data = await LastOperation.findOneAndUpdate({ _id: id, status: 1, operation: 'open' }, { status: 0 });
+            const data = await LastOperation.findByIdAndUpdate({ _id: id }, { status: 0 });
             res.status(201).json({ Info: "Estado cambiado" })
         } catch (error) {
             res.status(500).json({ "Error Type": error.name, "Detalle": error.message });
@@ -136,7 +136,7 @@ class CashController {
         //Al proceder a registrar una apertura se requiere des habilitar el registro del ultimo Cierre 
         try {
             let { id } = req.body
-            const data = await LastOperation.findByAndUpdate({ _id: id }, { status: 0 });
+            const data = await LastOperation.findByIdAndUpdate({ _id: id }, { status: 0 });
             res.status(201).json({ Info: "Estado cambiado" })
         } catch (error) {
             res.status(500).json({ "Error Type": error.name, "Detalle": error.message });
@@ -157,7 +157,7 @@ class CashController {
         //Los tickets de venta que se cuentan en un cierre se dan por contados status:0
         try {
             let { id } = req.body
-            const data = await SellTicket.findOneAndUpdate({ _id: id, status: 1 }, { status: 0 });
+            const data = await SellTicket.findByIdAndUpdate({ _id: id }, { status: 0 });
             res.status(201).json({ Info: 'Se hizo el cambio' })
         } catch (error) {
             res.status(500).json({ "Error Type": error.name, "Detalle": error.message });
