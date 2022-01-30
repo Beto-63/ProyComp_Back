@@ -14,7 +14,7 @@ const sell_ticketSchema = Schema({
     channel_id: {
         type: String
     },
-    payment_method_id: {
+    payment_method: {
         type: String
     },
     user_id: {
