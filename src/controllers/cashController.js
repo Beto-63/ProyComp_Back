@@ -136,7 +136,7 @@ class CashController {
         //Al proceder a registrar una apertura se requiere des habilitar el registro del ultimo Cierre 
         try {
             let { id } = req.body
-            const data = await LastOperation.findOneAndUpdate({ _id: id, status: 1, operation: 'close' }, { status: 0 });
+            const data = await LastOperation.findByAndUpdate({ _id: id }, { status: 0 });
             res.status(201).json({ Info: "Estado cambiado" })
         } catch (error) {
             res.status(500).json({ "Error Type": error.name, "Detalle": error.message });
