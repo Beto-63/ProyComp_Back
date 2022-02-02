@@ -87,11 +87,12 @@ class CashController {
         }
     }
 
-    getLastOpenTransaction = async (req, res) => {
+    getLastOpenTransactionByChannel = async (req, res) => {
         //Retorna, si esta vigente(status:1) , la ultima transaccion de apertura
         //Tiene que existir para proceder con un cierre 
         try {
-            const data = await LastOperation.find({ operation: 'open', status: 1 });
+            const { channel } = req.body
+            const data = await LastOperation.find({ operation: 'open', status: 1, channel: channel });
             res.status(201).json(data)
         } catch (error) {
             res.status(500).json({ "Error Type": error.name, "Detalle": error.message });
@@ -121,11 +122,12 @@ class CashController {
         }
     }
 
-    getLastCloseTransaction = async (req, res) => {
+    getLastCloseTransactionByChannel = async (req, res) => {
         //Retorna, si esta vigente(status:1) , la ultima transaccion de cierre
         //Tiene que existir para proceder con una apertura
         try {
-            const data = await LastOperation.find({ operation: 'close', status: 1 });
+            const { channel } = req.body
+            const data = await LastOperation.find({ operation: 'close', status: 1, channel: channel });
             res.status(201).json(data)
         } catch (error) {
             res.status(500).json({ "Error Type": error.name, "Detalle": error.message });
