@@ -9,6 +9,6 @@ const dailySalesSchema = Schema({
         //este array contiene las ventas dicriminadas por medio de pago asi [medio_de_pago, cantidad]
     }
 
-}, { timestamps: true, collection: 'sell_ticket' });
+}, { timestamps: true, collection: 'daily_sales' });
 
 module.exports = model('DaylySales', dailySalesSchema);
