@@ -20,10 +20,11 @@ class SalesController {
              *      Otro con los diferentes medios de pago (Arreglo de Objetos / como esta en Mongo)
              *  y finalmente guardaremos el total de las ventas en total_amount y
              *  un arreglo de [ventas, metodo de pago] del Dia */
-            let { sell_tickets, payment_method } = req.body;
+            let { sell_tickets, payment_method, channel } = req.body;
             let temp = 0;
             let totalSales = 0;
             let salesByPmntM = [[]];
+
             payment_method.forEach((eachM, index) => {
                 temp = 0;
                 sell_tickets.forEach(eachT => {
@@ -35,7 +36,7 @@ class SalesController {
                 salesByPmntM[index] = [eachM.name, temp];
                 totalSales = totalSales + temp;
             });
-            const data = await Sales.create({ total_amount: totalSales, amount_by_method: salesByPmntM })
+            const data = await Sales.create({ total_amount: totalSales, amount_by_method: salesByPmntM, channel: channel })
             res.status(201).json(data);
         } catch (error) {
             res.status(500).json({ "Error Type": error.name, "Detalle": error.message });
