@@ -23,6 +23,7 @@ const ProductRouter = require('./routers/product.Routes');
 const CashRouter = require('./routers/cash.Routes');
 const Sell_ticketRouter = require('./routers/sell_ticket.Routes');
 const ClientRouter = require('./routers/client.Routes');
+const SalesRouter = require('./routers/sales.Routes')
 
 // Ruta de pruebas de auth y token
 const TestRouter = require('./routers/test.Routes');
@@ -55,7 +56,7 @@ class Server {
         this.app.use(express.json());
 
         //Usar morgan en express para el monitoreo de las peticiones htttp
-        this.app.use(morgan('dev'));
+        this.app.use(morgan('combined'));
 
 
         //TODO - Settings
@@ -72,6 +73,7 @@ class Server {
         let cashR = new CashRouter();
         let sell_ticketR = new Sell_ticketRouter();
         let clientR = new ClientRouter();
+        let salesR = new SalesRouter()
 
         let testR = new TestRouter();
 
@@ -84,6 +86,7 @@ class Server {
         this.app.use(cashR.router);
         this.app.use(sell_ticketR.router);
         this.app.use(clientR.router);
+        this.app.use(salesR.router);
 
         this.app.use(testR.router);
 
