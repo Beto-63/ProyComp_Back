@@ -10,6 +10,7 @@
 // Importar Modulos
 const Sales = require('../models/daily_sales');
 const SellTicket = require('../models/sell_ticket');
+const PaymentMethod = require('../models/payment_method')
 
 class SalesController {
 
@@ -54,7 +55,15 @@ class SalesController {
         } catch (error) {
             res.status(500).json({ "Error Type": error.name, "Detalle": error.message });
         }
+    }
 
+    getPaymentMethods = async (req, res) => {
+        try {
+            const data = await PaymentMethod.find({ status: 1 })
+            res.status(201).json(data)
+        } catch (error) {
+            res.status(500).json({ "Error Type": error.name, "Detalle": error.message });
+        }
     }
 
 };
