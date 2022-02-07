@@ -15,6 +15,9 @@ class UserRouter {
         this.router.post('/users', objUserC.createUser);
         this.router.put('/users/:id', objUserC.updateUser);
         this.router.delete('/users', objUserC.deleteUser);
+        this.router.get('/user/cats', objUserC.getAllUserCats);
+        this.router.post('/user/byEmail', objUserC.getUserByEmail);
+
         //this.router.post('/users/login', objUserC.login);
 
         //this.router.post('users/login/auth', authorizeRequest); por definir

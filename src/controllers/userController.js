@@ -40,6 +40,22 @@ class UserController {
 
     }
 
+    getUserByEmail = async (req, res) => {
+        try {
+            const { email } = req.body;
+            console.log(email)
+            const user = await User.findOne({ email: email })
+            // Si el corrreo no se encuentra en DB y la consulta es vacia
+            if (user == null) {
+                return res.status(404).json({ message: 'Usuario no encontrada' });
+            }
+            console.log(user)
+            return res.status(200).json(user);
+        } catch (error) {
+            return res.status(400).json({ error: error.message });
+        }
+    }
+
 
     createUser = async (req, res) => {
 
@@ -47,26 +63,30 @@ class UserController {
 
             //return res.status(200).json({ message: 'Register' });
 
-            const { nick, email, password, user_cat } = req.body;
+            const { name, email, password, personal_email, phone_number, user_cat, channel } = req.body;
 
             // Validar si el usuario ya existe, antes de guardar
-            const nickFound = await User.findOne({ nick: nick });
-            if (nickFound) {
-                return res.status(400).json({ message: 'Este nick ya existe' });
+            const nameFound = await User.findOne({ name: name });
+            if (nameFound) {
+                return res.status(400).json({ message: 'Este nombre ya existe' });
             }
             const emailFound = await User.findOne({ email: email });
             if (emailFound) {
                 return res.status(400).json({ message: 'El email ya existe' });
             }
 
-
             // encriptando la contraseña
             const encryptedPassword = await User.encryptPassword(password);
 
             const newUser = new User({
-                nick: nick,
+                name: name,
                 email: email,
-                password: encryptedPassword
+                password: encryptedPassword,
+                personal_email: personal_email,
+                phone_number: phone_number,
+                user_cat: user_cat,
+                channel: channel,
+                status: 2  // este status es de creacion, requerira se defina un nuevo password por el Usuario
             });
 
 
@@ -87,7 +107,7 @@ class UserController {
                     // y por cada objeto, solo quiero obtener el _id
                     //newUser.roles = foundRoles.map(role => role._id);
                     newUser.user_cat = foundRoles.map(role => role.name);
-
+                    // Por ahora los user_cat seran sencillos asi queda para eventuales roles mixtos 
                 } else {
 
                     // Se asigna el rol predeterminado 'user'
@@ -120,12 +140,12 @@ class UserController {
 
 
     updateUser = async (req, res) => {
-
+        //no se como funciona este id creo que el que va en la ruta
         try {
 
             const { id } = req.params;
 
-            const { nick, email, password, user_cat } = req.body;
+            const { name, email, password, user_cat, channel, status } = req.body;
 
             // Se valida si existe un suario con este id
             const response = await User.findById(id);
@@ -137,11 +157,11 @@ class UserController {
             if (password != '' && password != null) {
                 var encryptedPassword = await User.encryptPassword(password);
             }
-
+            // TODO aqui me falta crear un objeto con la info no variada y la info variada antes de hacer la actualizacion
             const updatedUser = await User.findByIdAndUpdate(id, {
-                nick: nick,
+                name: name,
                 email: email,
-                password: encryptedPassword
+                password: encryptedPassword,
             }, { new: true });
 
 
@@ -217,6 +237,15 @@ class UserController {
 
     deleteUser = async (req, res) => {
 
+    }
+
+    getAllUserCats = async (req, res) => {
+        try {
+            const data = await user_catModel.find();
+            return res.status(201).json(data);
+        } catch (error) {
+            res.status(500).json({ "Error Type": error.name, "Detalle": error.message });
+        }
     }
 }
 
