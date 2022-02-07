@@ -2,12 +2,7 @@ const { Schema, model } = require('mongoose');
 const bcrypt = require('bcrypt');
 //NOTA user, user_id no se requieren funcionalmente, no se si se requieran desde el punto de vista de seguridad
 const userSchema = Schema({
-    // user: {
-    //     type: String
-    // },
-    // user_id: {
-    //     type: Number
-    // },
+
     name: {
         type: String
     },
