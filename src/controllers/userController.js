@@ -145,7 +145,7 @@ class UserController {
 
             const { id } = req.params;
 
-            const { name, email, password, user_cat, channel, status } = req.body;
+            const { name, personal_email, phone_number, user_cat, channel, status } = req.body;
 
             // Se valida si existe un suario con este id
             const response = await User.findById(id);
@@ -153,15 +153,18 @@ class UserController {
                 return res.status(400).json({ message: 'Usuario no encontrado para editar' });
             }
 
-            // encriptando la contraseña
-            if (password != '' && password != null) {
-                var encryptedPassword = await User.encryptPassword(password);
-            }
+            // // encriptando la contraseña
+            // if (password != '' && password != null) {
+            //     var encryptedPassword = await User.encryptPassword(password);
+            // }
             // TODO aqui me falta crear un objeto con la info no variada y la info variada antes de hacer la actualizacion
             const updatedUser = await User.findByIdAndUpdate(id, {
                 name: name,
-                email: email,
-                password: encryptedPassword,
+                personal_email: personal_email,
+                phone_number: phone_number,
+                channel: channel,
+                user_cat: user_cat,
+                status: status
             }, { new: true });
 
 
