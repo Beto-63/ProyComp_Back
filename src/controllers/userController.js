@@ -143,9 +143,8 @@ class UserController {
         //no se como funciona este id creo que el que va en la ruta
         try {
 
-            const { id } = req.params;
 
-            const { name, personal_email, phone_number, user_cat, channel, status } = req.body;
+            const { id, name, personal_email, phone_number, user_cat, channel, status } = req.body;
 
             // Se valida si existe un suario con este id
             const response = await User.findById(id);
