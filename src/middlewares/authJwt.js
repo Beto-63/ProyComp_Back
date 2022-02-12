@@ -114,13 +114,13 @@ const verifyToken = async (req, res, next) => { // Es una funcion intermedia
             }
 
             // No se encontró la ruta / retorna una respuesta false
-            return res.status(401).json({message: "No tiene acceso a esta ruta"});
+            return res.status(403).json({message: "No tiene acceso a esta ruta"}); // 
 
         }
 
 
     } catch (error) {
-        return res.status(401).json({message: 'Unauthorized', error});
+        return res.status(401).json({message: 'Unauthorized', error}); // 
     }
 
 }
