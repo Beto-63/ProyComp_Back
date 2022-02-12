@@ -33,7 +33,7 @@ const verifyToken = async (req, res, next) => { // Es una funcion intermedia
         //console.log('token '+token)
 
         if(!token){ // Sino existe el token
-            return res.status(403).json({message: 'No token provided'});
+            return res.status(401).json({message: 'No token provided'});
         }
 
 
