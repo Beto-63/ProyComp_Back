@@ -16,6 +16,7 @@ class StockRouter {
         this.router.post('/stock/channels', objStockC.createChannel);
         this.router.post('/stock/findByName', objStockC.getItemsByName);
         this.router.post('/stock/findByCatName', objStockC.getItemsByCatName);
+        this.router.post('/stock/findByChannel', objStockC.getItemsByChannel);
         this.router.post('/stock/findByNameChannel', objStockC.getItemByNameAndChannel);
         this.router.post('/stock/findByCatNameChannel', objStockC.getItemByCatNameAndChannel);
         this.router.put('/stock/addQty', objStockC.addQty);
