@@ -105,6 +105,17 @@ class StockController {
         };
     }
 
+    getItemsByChannel = async (req, res) => {
+        try {
+            let { channel } = req.body;
+            //recupera todos los items con el nombre especificado en todas las ubicaciones en la BD
+            const data = await StockItem.find({ channel: channel });
+            res.status(200).json(data);
+        } catch (error) {
+            res.status(500).json({ "Error Type": error.name, "Detalle": error.message });
+        };
+    }
+
 
 
     getItemByNameAndChannel = async (req, res) => {
