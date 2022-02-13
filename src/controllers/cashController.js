@@ -38,7 +38,7 @@ class CashController {
         //Retorna la lista de gastos no contados en un cierre de caja
         try {
             const data = await ExpenseItem.find({ status: 1 });
-            res.status(201).json(data)
+            res.status(200).json(data)
         } catch (error) {
             res.status(500).json({ "Error Type": error.name, "Detalle": error.message });
         }
@@ -49,7 +49,7 @@ class CashController {
         try {
             let { id } = req.body
             const data = await ExpenseItem.findByIdAndUpdate({ _id: id }, { status: 0 });
-            res.status(201).json(data)
+            res.status(201).json({ info: 'El gasto se tuvo en cuenta ya en un cierre' })
         } catch (error) {
             res.status(500).json({ "Error Type": error.name, "Detalle": error.message });
         }
@@ -70,7 +70,7 @@ class CashController {
         //Retorna la lista de consignaciones no contados en un cierre de caja
         try {
             const data = await DepositItem.find({ status: 1 });
-            res.status(201).json(data)
+            res.status(200).json(data)
         } catch (error) {
             res.status(500).json({ "Error Type": error.name, "Detalle": error.message });
         }
@@ -81,7 +81,7 @@ class CashController {
         try {
             let { id } = req.body
             const data = await DepositItem.findByIdAndUpdate({ _id: id }, { status: 0 });
-            res.status(201).json({ Info: "Estado cambiado" })
+            res.status(201).json({ Info: 'La consignación se tuvo en cuenta ya en un cierre' })
         } catch (error) {
             res.status(500).json({ "Error Type": error.name, "Detalle": error.message });
         }
@@ -93,7 +93,7 @@ class CashController {
         try {
             const { channel } = req.body
             const data = await LastOperation.find({ operation: 'open', status: 1, channel: channel });
-            res.status(201).json(data)
+            res.status(200).json(data)
         } catch (error) {
             res.status(500).json({ "Error Type": error.name, "Detalle": error.message });
         }
@@ -104,7 +104,7 @@ class CashController {
         try {
             let { id } = req.body
             const data = await LastOperation.findByIdAndUpdate({ _id: id }, { status: 0 });
-            res.status(201).json({ Info: "Estado cambiado" })
+            res.status(201).json({ Info: "La ultima apertura se ha tenido en cuenta" })
         } catch (error) {
             res.status(500).json({ "Error Type": error.name, "Detalle": error.message });
         }
@@ -128,7 +128,7 @@ class CashController {
         try {
             const { channel } = req.body
             const data = await LastOperation.find({ operation: 'close', status: 1, channel: channel });
-            res.status(201).json(data)
+            res.status(200).json(data)
         } catch (error) {
             res.status(500).json({ "Error Type": error.name, "Detalle": error.message });
         }
@@ -139,7 +139,7 @@ class CashController {
         try {
             let { id } = req.body
             const data = await LastOperation.findByIdAndUpdate({ _id: id }, { status: 0 });
-            res.status(201).json({ Info: "Estado cambiado" })
+            res.status(201).json({ Info: "El ultimo cierre se ha tenido en cuenta" })
         } catch (error) {
             res.status(500).json({ "Error Type": error.name, "Detalle": error.message });
         }
@@ -149,7 +149,7 @@ class CashController {
         //Retorna la lista tickets de venta No contados en un cierre de caja es decir con status:1
         try {
             const data = await SellTicket.find({ status: 1 });
-            res.status(201).json(data)
+            res.status(200).json(data)
         } catch (error) {
             res.status(500).json({ "Error Type": error.name, "Detalle": error.message });
         }
@@ -160,7 +160,7 @@ class CashController {
         try {
             let { id } = req.body
             const data = await SellTicket.findByIdAndUpdate({ _id: id }, { status: 0 });
-            res.status(201).json({ Info: 'Se hizo el cambio' })
+            res.status(201).json({ Info: 'Las ventas se han tenido en cuenta en el cierre' })
         } catch (error) {
             res.status(500).json({ "Error Type": error.name, "Detalle": error.message });
         }

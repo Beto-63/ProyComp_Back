@@ -34,7 +34,7 @@ class StockController {
             let { name, quantity, channel, cat_name, status } = req.body;
             //Insertar/crear el Stock Item en la BD
             const data = await StockItem.create({ name, quantity, channel, cat_name, status });
-            res.status(201).json(data);
+            res.status(201).json({ Info: 'Se creo el elemento inventariable' });
         } catch (error) {
             res.status(500).json({ "Error Type": error.name, "Detalle": error.message });
         }
@@ -47,7 +47,7 @@ class StockController {
             const data = await StockItem.find();
             res.status(200).json(data);
         } catch (error) {
-            res.status(400).json({ "Error Type": error.name, "Detalle": error.message });
+            res.status(500).json({ "Error Type": error.name, "Detalle": error.message });
         };
     }
 
@@ -56,7 +56,7 @@ class StockController {
             let { name, status } = req.body;
             //Insertar/crear el un Canal de distribucion
             const data = await Channel.create({ name, status });
-            res.status(201).json(data);
+            res.status(201).json({ Info: 'Se creo el canal' });
         } catch (error) {
             res.status(500).json({ "Error Type": error.name, "Detalle": error.message });
         }
@@ -68,7 +68,7 @@ class StockController {
             const data = await Channel.find({ status: 1 });
             res.status(200).json(data);
         } catch (error) {
-            res.status(400).json({ "Error Type": error.name, "Detalle": error.message });
+            res.status(500).json({ "Error Type": error.name, "Detalle": error.message });
         };
     }
 
@@ -77,7 +77,7 @@ class StockController {
             let { id } = req.body;
             //Ajusta cualquier atributo del Stock Item: cantidad, status, nombre, ubicacion
             const data = await StockItem.findByIdAndUpdate({ _id: id }, req.body);
-            res.status(201).json(data);
+            res.status(201).json({ Info: 'Se ajustaron los datos del elemento inventariable' });
         } catch (error) {
             res.status(500).json({ "Error Type": error.name, "Detalle": error.message });
         };
@@ -90,7 +90,7 @@ class StockController {
             const data = await StockItem.find({ name: name });
             res.status(200).json(data);
         } catch (error) {
-            res.status(400).json({ "Error Type": error.name, "Detalle": error.message });
+            res.status(500).json({ "Error Type": error.name, "Detalle": error.message });
         };
     }
 
@@ -101,7 +101,7 @@ class StockController {
             const data = await StockItem.find({ cat_name: cat_name });
             res.status(200).json(data);
         } catch (error) {
-            res.status(400).json({ "Error Type": error.name, "Detalle": error.message });
+            res.status(500).json({ "Error Type": error.name, "Detalle": error.message });
         };
     }
 
@@ -113,12 +113,12 @@ class StockController {
             //retona el Stock Item que conicida Nombre y en una especifica ubicacion en la BD
             const data = await StockItem.findOne({ name: name, channel: channel });
             if (data.status == 1) {
-                res.status(201).json(data);
+                res.status(200).json(data);
             } else {
-                res.json({ Error: "El item del stock esta inactivo" })
+                res.status(404).json({ Error: "El item del stock esta inactivo" })
             }
         } catch (error) {
-            res.status(400).json({ "Error Type": error.name, "Detalle": error.message });
+            res.status(500).json({ "Error Type": error.name, "Detalle": error.message });
         }
     };
 
@@ -127,9 +127,9 @@ class StockController {
             let { cat_name, channel } = req.body;
             //retona los Stock Items que conicidan la categoria y una especifica ubicacion en la BD
             const data = await StockItem.find({ cat_name: cat_name, channel: channel });
-            res.status(201).json(data);
+            res.status(200).json(data);
         } catch (error) {
-            res.status(400).json({ "Error Type": error.name, "Detalle": error.message });
+            res.status(500).json({ "Error Type": error.name, "Detalle": error.message });
         }
     }
 
@@ -142,10 +142,10 @@ class StockController {
                 await StockItem.findByIdAndUpdate({ _id: data.id }, data);
                 res.status(201).json({ info: "Actualizacion exitosa" });
             } else {
-                res.json({ Error: "El item del stock esta inactivo" })
+                res.status(404).json({ Error: "El item del stock esta inactivo" })
             }
         } catch (error) {
-            res.status(400).json({ "Error Type": error.name, "Detalle": error.message });
+            res.status(500).json({ "Error Type": error.name, "Detalle": error.message });
         };
     }
 
@@ -162,15 +162,15 @@ class StockController {
                 await StockItem.findOneAndUpdate({ _id: data2._id }, data2);
                 res.status(201).json({ info: "Transferencia exitosa" });
             } else {
-                res.json({ Error: "El item del stock esta inactivo" })
+                res.status(404).json({ Error: "El item del stock esta inactivo" })
             }
         } catch (error) {
-            res.status(400).json({ "Error Type": error.name, "Detalle": error.message });
+            res.status(500).json({ "Error Type": error.name, "Detalle": error.message });
         }
     }
 
     stockConsumption = async (req, res) => {
-
+        //TODO al terminar este debo revisar la definicion de codigos res.status(###)
         try {
             const { sell_ticket_id, channel } = req.body;
             let objSellTicket, objProduct, objStock, objCombo = {}
@@ -201,7 +201,7 @@ class StockController {
                 res.status(201).json({ info: "Descontada venta del inventario" });
             });
         } catch (error) {
-            res.status(400).json({ "Error Type": error.name, "Detalle": error.message });
+            res.status(500).json({ "Error Type": error.name, "Detalle": error.message });
         }
     }
 }
