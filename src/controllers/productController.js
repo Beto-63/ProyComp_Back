@@ -25,7 +25,7 @@ class ProductController {
             let { product_id, name, description, price, cat_name, temperature, img_url, stock_name, stock_qty, status } = req.body;
             //Insertar/crear el producto para venta en la BD
             const data = await Product.create({ product_id, name, description, price, cat_name, temperature, img_url, stock_name, stock_qty, status });
-            res.status(201).json(data);
+            res.status(201).json({ info: 'Se ha creado en producto' });
         } catch (error) {
             res.status(500).json({ "Error Type": error.name, "Detalle": error.message });
         };
@@ -36,7 +36,7 @@ class ProductController {
             //Obtener los detalles de un producto
             //let { name } = req.body;
             const data = await Product.findOne(req.body);
-            res.status(201).json(data);
+            res.status(200).json(data);
         } catch (error) {
             res.status(500).json({ "Error Type": error.name, "Detalle": error.message });
         };
@@ -48,7 +48,7 @@ class ProductController {
             let { name, product_id, contents, status } = req.body;
             //Insertar/crear un combo o conjunto de productos
             const data = await Combo.create({ name, product_id, contents, status });
-            res.status(201).json(data);
+            res.status(201).json({ Info: 'se ha creado el combo' });
         } catch (error) {
             res.status(500).json({ "Error Type": error.name, "Detalle": error.message });
         };
@@ -59,7 +59,7 @@ class ProductController {
             let { id } = req.body;
             //Ajustar/crear el producto para venta en la BD
             const data = await Product.findByIdAndUpdate(id, req.body);
-            res.status(201).json(data);
+            res.status(201).json({ Info: "El producto ha sido ajustado" });
         } catch (error) {
             res.status(500).json({ "Error Type": error.name, "Detalle": error.message });
         };
@@ -71,7 +71,7 @@ class ProductController {
             console.log(_id)
             //Ajustar/ajusta los combos en la BD
             const data = await Combo.findByIdAndUpdate(_id, req.body);
-            res.status(201).json(data);
+            res.status(201).json({ Info: "El combo ha sido ajustado" });
         } catch (error) {
             res.status(500).json({ "Error Type": error.name, "Detalle": error.message });
         };
@@ -89,13 +89,13 @@ class ProductController {
                     const data = await Product.find({ cat_name: cat_name });
                     res.status(200).json(data);
                 } catch (error) {
-                    res.status(400).json({ "Error Type": error.name, "Detalle": error.message });
+                    res.status(500).json({ "Error Type": error.name, "Detalle": error.message });
                 };
             } else {
-                res.json({ Error: "Categoria Invalida" })
+                res.status(404).json({ Error: "Categoria Invalida" })
             }
         } catch (error) {
-            res.status(400).json({ "Error Type": error.name, "Detalle": error.message });
+            res.status(500).json({ "Error Type": error.name, "Detalle": error.message });
         }
     };
 
@@ -110,13 +110,13 @@ class ProductController {
                     const data = await Product.find({ cat_name: cat_name, temperature: temperature });
                     res.status(200).json(data);
                 } catch (error) {
-                    res.status(400).json({ "Error Type": error.name, "Detalle": error.message });
+                    res.status(500).json({ "Error Type": error.name, "Detalle": error.message });
                 };
             } else {
-                res.json({ Error: "Categoria Invalida" })
+                res.status(404).json({ Error: "Categoria Invalida" })
             }
         } catch (error) {
-            res.status(400).json({ "Error Type": error.name, "Detalle": error.message });
+            res.status(500).json({ "Error Type": error.name, "Detalle": error.message });
         }
     };
 
@@ -127,7 +127,7 @@ class ProductController {
             const data = await Product.find({ cat_name: cat_name });
             res.status(200).json(data);
         } catch (error) {
-            res.status(400).json({ "Error Type": error.name, "Detalle": error.message });
+            res.status(500).json({ "Error Type": error.name, "Detalle": error.message });
         };
     }
 
@@ -136,7 +136,7 @@ class ProductController {
             const data = await Category.find()
             res.status(200).json(data);
         } catch (error) {
-            res.status(400).json({ "Error Type": error.name, "Detalle": error.message });
+            res.status(500).json({ "Error Type": error.name, "Detalle": error.message });
         }
     };
 
@@ -146,7 +146,7 @@ class ProductController {
             let { name, status } = req.body;
             //Insertar/crear una nueva categoria de Producto
             const data = await Category.create({ name, status });
-            res.status(201).json(data);
+            res.status(201).json({ Info: 'Categoria creada' });
         } catch (error) {
             res.status(500).json({ "Error Type": error.name, "Detalle": error.message });
         };
