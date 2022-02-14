@@ -19,6 +19,7 @@ const createRoles = async function createRoles() {
                     {
                         "name": "admin",
                         "allowed_routes": [
+                            {"url": "/verify", "method": "GET"},
                             {"url": "/test", "method": "GET"}
                         ]
                     }
@@ -28,6 +29,7 @@ const createRoles = async function createRoles() {
                     {
                         "name": "clerk",
                         "allowed_routes": [
+                            {"url": "/verify", "method": "GET"},
                             {"url": "/test", "method": "GET"}
                         ]
                     }
