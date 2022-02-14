@@ -114,7 +114,7 @@ class AuthController {
 
     // Valida el token para permitir navegación en el frontend
     verifyNavigation = async (req, res) => {
-        return res.status(200);
+        return res.status(200).json({});
     }
 
     // Login
