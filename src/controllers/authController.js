@@ -112,6 +112,11 @@ class AuthController {
 
     }*/
 
+    // Valida el token para permitir navegación en el frontend
+    verifyNavigation = async (req, res) => {
+        return res.status(200);
+    }
+
     // Login
     signIn = async (req, res) => {
 
@@ -382,7 +387,7 @@ class AuthController {
                 token,
                 codigoVerificacion,
                 password1,
-                password2
+                //password2
             } = req.body;
 
             // Se valida si el link existe en las solicitudes de recuperación de contraseña
