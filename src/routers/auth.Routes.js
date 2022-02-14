@@ -1,6 +1,8 @@
 const { Router } = require('express');
 const AuthController = require('../controllers/authController');
 
+const { verifyToken } = require('../middlewares/authJwt');
+
 class AuthRouter {
     constructor() {
         this.router = Router();
@@ -24,6 +26,9 @@ class AuthRouter {
 
         // Recibo los datos de recuperación de la contraseña
         this.router.post('/recovery', objAuthC.passwordReset);
+
+        // Valida el token para permitir navegación en el frontend
+        this.router.get('/verify', verifyToken, objAuthC.verifyNavigation);
 
         //this.router.post('users/login/auth', authorizeRequest); por definir
     }
