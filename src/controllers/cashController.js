@@ -35,9 +35,10 @@ class CashController {
     }
 
     getUnAccountedExpenses = async (req, res) => {
-        //Retorna la lista de gastos no contados en un cierre de caja
+        //Retorna la lista de gastos no contados en un cierre de caja cuando se especifica el Channel
         try {
-            const data = await ExpenseItem.find({ status: 1 });
+            const { channel } = req.body
+            const data = await ExpenseItem.find({ channel: channel, status: 1 });
             res.status(200).json(data)
         } catch (error) {
             res.status(500).json({ "Error Type": error.name, "Detalle": error.message });
@@ -69,7 +70,8 @@ class CashController {
     getUnAccountedDeposits = async (req, res) => {
         //Retorna la lista de consignaciones no contados en un cierre de caja
         try {
-            const data = await DepositItem.find({ status: 1 });
+            const { channel } = req.body
+            const data = await DepositItem.find({ channel: channel, status: 1 });
             res.status(200).json(data)
         } catch (error) {
             res.status(500).json({ "Error Type": error.name, "Detalle": error.message });

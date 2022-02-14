@@ -76,6 +76,7 @@ class StockController {
         try {
             let { id } = req.body;
             //Ajusta cualquier atributo del Stock Item: cantidad, status, nombre, ubicacion
+            //TODO Cuando se trate de cantidades guardar las cantidades ajustadas en una nueva coleccion
             const data = await StockItem.findByIdAndUpdate({ _id: id }, req.body);
             res.status(201).json({ Info: 'Se ajustaron los datos del elemento inventariable' });
         } catch (error) {
