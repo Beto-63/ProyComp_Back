@@ -1,23 +1,25 @@
 const { Schema, model } = require('mongoose');
 
 const sell_ticketSchema = Schema({
-    client_id: {
-        type: String
-    },
-    products_sold: {
-        type: Array
-        //este array contiene el _id del producto vendido, la cantidad vendida y el precio unitario del producto
-    },
+
+    products_sold: [{
+        name: { type: String },
+        quantiry: { type: Number },
+        price: { type: Number }
+    }],
     amount_sold: {
         type: Number
     },
-    channel_id: {
+    channel: {
         type: String
     },
     payment_method: {
         type: String
     },
-    user_id: {
+    user_name: {
+        type: String
+    },
+    sale_origin: {
         type: String
     },
     status: {
@@ -35,13 +37,13 @@ Debe tener:
 - Id del cliente en la base de datos para ligar 
 la venta con las caracterisitidas demograficas del cliente
 Productos
-- Productos vendidos es un arreglo con los 
-    - [prucuct id, qty, monto en pesos del line item]
+- Productos vendidos es un arreglo de Objetos 
+    - [{prucuct name, qty, precio del item individual}]
 - Monto de la venta total
-- date ******Debe capturar el dia y la hora******
-- Channel id
+- Channel name
 - Payment Method
-- User Id
+- User_name
+- date ******Debe capturar el dia y la hora (tmestamp)******
 
 Esta coleccion debe ser recorrida para hacer cierre de caja y generar estadisticas 
 
