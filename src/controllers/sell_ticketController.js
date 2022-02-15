@@ -1,4 +1,5 @@
 const Sell_ticket = require('../models/sell_ticket')
+const Origin = require('../models/sale_origin')
 
 class Sell_ticketController {
     getAllTickets = (req, res) => {
@@ -28,6 +29,16 @@ class Sell_ticketController {
             }
         })
 
+    }
+
+    getAllSaleOrigins = (req, res) => {
+        Origin.find({}, (error, data) => {
+            if (error) {
+                res.status(500).json({ "Error Type": error.name, "Detalle": error.message });
+            } else {
+                res.status(200).json(data);
+            }
+        });
     }
 
     getTicketById = (req, res) => {

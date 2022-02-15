@@ -1,5 +1,5 @@
 const { Schema, model } = require('mongoose');
-
+//TODO incluir en las categorias a los paquetes de cada tamano, para hacerlo compatible con la funcionalidad de combos
 const categorySchema = Schema({
     name: {
         type: String
