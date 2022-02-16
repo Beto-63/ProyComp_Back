@@ -13,7 +13,7 @@ class ClientController {
 
     newClient = (req, res) => {
         let objClient = req.body;
-        Client.create(objClient, (error) => {
+        Client.create(objClient, (error, data) => {
             if (error) {
                 res.status(500).json(error)
             } else {
