@@ -2,9 +2,13 @@ const { Schema, model } = require('mongoose');
 
 const sell_ticketSchema = Schema({
 
+    client_id: {
+        type: String
+    },
     products_sold: [{
         name: { type: String },
-        quantiry: { type: Number },
+        temperature: { String },
+        quantity: { type: Number },
         price: { type: Number }
     }],
     amount_sold: {
