@@ -7,7 +7,7 @@ const sell_ticketSchema = Schema({
     },
     products_sold: [{
         name: { type: String },
-        temperature: { String },
+        temperature: { type: String },
         quantity: { type: Number },
         price: { type: Number }
     }],
