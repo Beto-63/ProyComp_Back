@@ -18,6 +18,9 @@ const productSchema = Schema({
     cat_name: {
         type: String
     },
+    fill: {
+        type: String
+    },
     temperature: {
         type: String,
 
