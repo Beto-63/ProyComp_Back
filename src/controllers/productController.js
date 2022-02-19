@@ -45,9 +45,9 @@ class ProductController {
 
     createCombo = async (req, res) => {
         try {
-            let { name, product_id, contents, status } = req.body;
+            //let { name, products } = req.body;
             //Insertar/crear un combo o conjunto de productos
-            const data = await Combo.create({ name, product_id, contents, status });
+            const data = await Combo.create(req.body);
             res.status(201).json({ Info: 'se ha creado el combo' });
         } catch (error) {
             res.status(500).json({ "Error Type": error.name, "Detalle": error.message });
