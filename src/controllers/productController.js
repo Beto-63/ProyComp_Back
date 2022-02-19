@@ -22,9 +22,9 @@ class ProductController {
 
     createProduct = async (req, res) => {
         try {
-            let { product_id, name, description, price, cat_name, fill, temperature, img_url, stock_name, stock_qty, status } = req.body;
+            // let { product_id, name, description, price, cat_name, fill, temperature, img_url, stock_name, stock_qty, status } = req.body;
             //Insertar/crear el producto para venta en la BD
-            const data = await Product.create({ product_id, name, description, price, cat_name, fill, temperature, img_url, stock_name, stock_qty, status });
+            const data = await Product.create(req.body);
             res.status(201).json({ info: 'Se ha creado en producto' });
         } catch (error) {
             res.status(500).json({ "Error Type": error.name, "Detalle": error.message });
