@@ -120,6 +120,18 @@ class ProductController {
         }
     };
 
+    selectByPacketFillSize = async (req, res) => {
+        try {
+            let { fill, stock_qty } = req.body;
+            //recupera todos los Paquetes con te o todos los de Infusion
+            const data = await Product.find({ cat_name: 'Paquete', fill: fill, stock_qty: stock_qty });
+            res.status(200).json(data);
+        } catch (error) {
+            res.status(500).json({ "Error Type": error.name, "Detalle": error.message });
+        };
+    }
+
+
     getProductsByCatName = async (req, res) => {
         try {
             let { cat_name } = req.body;
