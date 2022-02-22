@@ -19,6 +19,9 @@ const last_operationSchema = Schema({
     cahnnel: {
         type: String
     },
+    user_email: {
+        type: String
+    },
     status: {
         type: Number,
         defualt: 1,

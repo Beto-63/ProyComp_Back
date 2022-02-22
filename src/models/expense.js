@@ -7,6 +7,9 @@ const expenseSchema = Schema({
     channel: {
         type: String
     },
+    user_email: {
+        type: String
+    },
     description: {
         type: String
     },
