@@ -20,7 +20,7 @@ const sell_ticketSchema = Schema({
     payment_method: {
         type: String
     },
-    user_name: {
+    user_email: {
         type: String
     },
     sale_origin: {

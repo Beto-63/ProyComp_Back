@@ -9,6 +9,9 @@ const bankDepositSchema = Schema({
     channel: {
         type: String
     },
+    user_email: {
+        type: String
+    },
     status: {
         type: Number,
         default: 1,
