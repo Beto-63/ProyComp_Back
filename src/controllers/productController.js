@@ -18,6 +18,7 @@ const Category = require('../models/category')
 
 
 
+
 class ProductController {
 
     createProduct = async (req, res) => {
@@ -75,6 +76,24 @@ class ProductController {
         } catch (error) {
             res.status(500).json({ "Error Type": error.name, "Detalle": error.message });
         };
+    };
+
+    getAllCombos = async (req, res) => {
+        try {
+            const data = await Combo.find()
+            res.status(200).json(data);
+        } catch (error) {
+            res.status(500).json({ "Error Type": error.name, "Detalle": error.message });
+        }
+    };
+
+    getAllCategories = async (req, res) => {
+        try {
+            const data = await Category.find()
+            res.status(200).json(data);
+        } catch (error) {
+            res.status(500).json({ "Error Type": error.name, "Detalle": error.message });
+        }
     };
 
     selectByCategory = async (req, res) => {
@@ -143,14 +162,9 @@ class ProductController {
         };
     }
 
-    getAllCategories = async (req, res) => {
-        try {
-            const data = await Category.find()
-            res.status(200).json(data);
-        } catch (error) {
-            res.status(500).json({ "Error Type": error.name, "Detalle": error.message });
-        }
-    };
+
+
+
 
     createCategory = async (req, res) => {
 
