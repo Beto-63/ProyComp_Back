@@ -22,6 +22,6 @@ const adjustmentSchema = Schema({
 
 
 
-}, { collection: 'adjustment' });
+}, { timestamp: true, collection: 'adjustment' });
 
 module.exports = model('adjustment', adjustmentSchema);
