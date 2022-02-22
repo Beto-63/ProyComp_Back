@@ -25,6 +25,7 @@ const Product = require('../models/product');
 const Combo = require('../models/combo');
 const SellTicket = require('../models/sell_ticket');
 const Channel = require('../models/channel')
+const Reason = require('../models/adjustment')
 
 
 class StockController {
@@ -76,13 +77,37 @@ class StockController {
         try {
             let { id } = req.body;
             //Ajusta cualquier atributo del Stock Item: cantidad, status, nombre, ubicacion
-            //TODO Cuando se trate de cantidades guardar las cantidades ajustadas en una nueva coleccion
             const data = await StockItem.findByIdAndUpdate({ _id: id }, req.body);
             res.status(201).json({ Info: 'Se ajustaron los datos del elemento inventariable' });
         } catch (error) {
             res.status(500).json({ "Error Type": error.name, "Detalle": error.message });
         };
     }
+
+    adjustQuantity = async (req, res) => {
+        try {
+            let { id } = req.body;
+            //Ajusta solo la cantidad del Stock Item
+            //TODO Cuando se trate de cantidades guardar las cantidades ajustadas en una nueva coleccion
+            const data = await StockItem.findByIdAndUpdate({ _id: id }, req.body);
+            res.status(201).json({ Info: 'Se ajusto la cantidad en el inventario' });
+        } catch (error) {
+            res.status(500).json({ "Error Type": error.name, "Detalle": error.message });
+        };
+    }
+
+    adjustReason = async (req, res) => {
+        try {
+            let { id } = req.body;
+            //Ajusta solo la cantidad del Stock Item
+            //TODO Cuando se trate de cantidades guardar las cantidades ajustadas en una nueva coleccion
+            const data = await Reason.create(req.body);
+            res.status(201).json({ Info: 'Se ajusto la cantidad en el inventario' });
+        } catch (error) {
+            res.status(500).json({ "Error Type": error.name, "Detalle": error.message });
+        };
+    }
+
 
     getItemsByName = async (req, res) => {
         try {
