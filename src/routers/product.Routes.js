@@ -22,6 +22,7 @@ class ProductRouter {
         this.router.post('/product/combo', objProductC.createCombo);
         this.router.put('/product/combo', objProductC.adjustCombo);
         this.router.get('/product/combo', objProductC.getAllCombos);
+        this.router.post('/product/combo/findByName', objProductC.getComboByName);
         this.router.post('/product/selectCat', objProductC.selectByCategory);
         this.router.post('/product/selectCatTemp', objProductC.selectByCatAndTemp);
         this.router.post('/product/selectPacketAndFill', objProductC.selectByPacketFillSize);

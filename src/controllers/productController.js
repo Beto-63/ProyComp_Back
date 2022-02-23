@@ -55,6 +55,17 @@ class ProductController {
         };
     };
 
+    getComboByName = async (req, res) => {
+        try {
+            let { name } = req.body;
+            //recupera todos los Paquetes con te o todos los de Infusion
+            const data = await Combo.findOne({ name: name });
+            res.status(200).json(data);
+        } catch (error) {
+            res.status(500).json({ "Error Type": error.name, "Detalle": error.message });
+        };
+    }
+
     adjustProduct = async (req, res) => {
         try {
             let { id } = req.body;
