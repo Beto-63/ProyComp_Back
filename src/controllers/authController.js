@@ -170,7 +170,7 @@ class AuthController {
             return res.status(201).json({ token });
 
         } catch (error) {
-            return res.status(401).json({ message: 'Error al hacer login', error });
+            return res.status(500).json({ "Error Type": error.name, "Detalle": error.message });
         }
 
     }
@@ -218,7 +218,7 @@ class AuthController {
 
 
         } catch (error) {
-            return res.status(401).json({ message: 'Error al hacer logout / token invalido', error });
+            return res.status(500).json({ "Error Type": error.name, "Detalle": error.message });
         }
 
     }
@@ -328,7 +328,7 @@ class AuthController {
             return res.status(200).json({ message: 'Envio del link para reset del password', link });
 
         } catch (error) {
-            return res.status(401).json({ message: 'Error al hacer generateNewTempPassword (Generar link de restablecer contraseña / envío de email)', error });
+            return res.status(500).json({ "Error Type": error.name, "Detalle": error.message });
         }
 
     }
@@ -370,7 +370,7 @@ class AuthController {
             }
 
         } catch (error) {
-            return res.status(401).json({ message: 'Error al hacer passwordResetRequest (validación del link de restablecer contraseña)', error });
+            return res.status(500).json({ "Error Type": error.name, "Detalle": error.message });
         }
 
     }
@@ -437,11 +437,11 @@ class AuthController {
                 return res.status(201).json({ message: 'Contraseña actualizada correctamente (redireccionar al login)' });
             } else {
                 // Si el id no se encuentra en DB y la consulta es vacia
-                return res.status(404).json({ message: 'Usuario no encontrado' });
+                return res.status(400).json({ message: 'Usuario no encontrado' });
             }
 
         } catch (error) {
-            return res.status(401).json({ message: 'Error al hacer passwordReset (recibir datos del formulario) ', error });
+            return res.status(500).json({ "Error Type": error.name, "Detalle": error.message });
         }
 
     }
