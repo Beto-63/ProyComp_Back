@@ -122,7 +122,7 @@ class ProductController {
                     res.status(500).json({ "Error Type": error.name, "Detalle": error.message });
                 };
             } else {
-                res.status(404).json({ Error: "Categoria Invalida" })
+                res.status(400).json({ Error: "Categoria Invalida" })
             }
         } catch (error) {
             res.status(500).json({ "Error Type": error.name, "Detalle": error.message });
@@ -143,7 +143,7 @@ class ProductController {
                     res.status(500).json({ "Error Type": error.name, "Detalle": error.message });
                 };
             } else {
-                res.status(404).json({ Error: "Categoria Invalida" })
+                res.status(400).json({ Error: "Categoria Invalida" })
             }
         } catch (error) {
             res.status(500).json({ "Error Type": error.name, "Detalle": error.message });
