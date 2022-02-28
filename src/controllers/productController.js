@@ -137,7 +137,7 @@ class ProductController {
             if (catObj.status == 1) {
                 try {
                     //busca todos los productos de una categoria y una temperatura 
-                    const data = await Product.find({ cat_name: cat_name, temperature: temperature });
+                    const data = await Product.find({ cat_name: cat_name, temperature: temperature, status: 1 });
                     res.status(200).json(data);
                 } catch (error) {
                     res.status(500).json({ "Error Type": error.name, "Detalle": error.message });
@@ -166,7 +166,7 @@ class ProductController {
         try {
             let { cat_name } = req.body;
             //recupera todos los items con el nombre especificado en todas las ubicaciones en la BD
-            const data = await Product.find({ cat_name: cat_name });
+            const data = await Product.find({ cat_name: cat_name, status: 1 });
             res.status(200).json(data);
         } catch (error) {
             res.status(500).json({ "Error Type": error.name, "Detalle": error.message });
