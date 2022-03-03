@@ -63,6 +63,7 @@ const createRoles = async function createRoles() {
                             { "url": "/product/selectCatTemp", "method": "POST" },
                             { "url": "/sell_ticket", "method": "POST" },
                             { "url": "/cash/deposit", "method": "POST" },
+                            { "url": "/stock", "method": "PUT" },
                             { "url": "/stock/findByChannel", "method": "POST" },
                             { "url": "/stock/findByChannel`", "method": "PUT" },
                             { "url": "/cash/last/transaction", "method": "POST" },
