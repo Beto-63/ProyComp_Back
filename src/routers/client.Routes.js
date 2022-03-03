@@ -1,6 +1,8 @@
 const { Router } = require('express');
 const ClientController = require('../controllers/clientController');
 
+const { verifyToken } = require('../middlewares/authJwt');
+
 class ClientRouter {
     constructor() {
         this.router = Router();
@@ -9,10 +11,10 @@ class ClientRouter {
     #config() {
         const clientC = new ClientController;
 
-        this.router.get('/client', clientC.getAllClients);
-        this.router.post('/client', clientC.newClient);         //
-        this.router.get('/client/:id', clientC.getClientById);
-        this.router.put('/client/update', clientC.editClient);
+        this.router.get('/client', verifyToken, clientC.getAllClients);
+        this.router.post('/client', verifyToken, clientC.newClient);         //
+        this.router.get('/client/:id', verifyToken, clientC.getClientById);
+        this.router.put('/client/update', verifyToken, clientC.editClient);
     }
 }
 module.exports = ClientRouter;
