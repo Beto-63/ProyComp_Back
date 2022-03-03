@@ -12,8 +12,8 @@ class SalesRouter {
         const objSalesC = new SalesController();
 
         this.router.get('/sales', objSalesC.getTodaySales)
-        this.router.get('/paymentMethods', objSalesC.getPaymentMethods)
-        this.router.post('/sales/byMethod', objSalesC.setDailySales)
+        this.router.get('/paymentMethods', objSalesC.getPaymentMethods) //
+        this.router.post('/sales/byMethod', objSalesC.setDailySales)    //
     }
 }
 
