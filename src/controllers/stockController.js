@@ -27,7 +27,28 @@ const SellTicket = require('../models/sell_ticket');
 const Channel = require('../models/channel')
 const Reason = require('../models/adjustment')
 
+const bringComboItems = async (name) => {
+    let objs = await Combo.findOne({ name: name })
+    return (objs.products)
+}
 
+const bringStockQty = async (name) => {
+    let obj = await Product.findOne({ name: name })
+    console.log("para", name, "descontar", obj.stock_qty)
+    return { name_to_discount: obj.stock_name, qty_to_discount: obj.stock_qty }
+}
+
+const discountElement = async (arreglo) => {
+    let objStock = {}
+    let newQty = 0
+    for (let index = 0; index < arreglo.length; index++) {
+        const e = arreglo[index];
+        objStock = await StockItem.findOne({ channel: e.channel, name: e.name })
+        newQty = objStock.quantity - e.qty_to_discount
+        StockItem.findByIdAndUpdate({ _id: objStock._id }, { quantity: newQty })
+    }
+
+}
 class StockController {
 
     createItem = async (req, res) => {
@@ -207,39 +228,67 @@ class StockController {
     }
 
     stockConsumption = async (req, res) => {
-        //TODO al terminar este debo revisar la definicion de codigos res.status(###)
+        console.log("lo que llega ", req.body)
+        let comboItems = []
+        let aDescontar = []
         try {
-            const { sell_ticket_id, channel } = req.body;
-            let objSellTicket, objProduct, objStock, objCombo = {}
-            let consumption = null
-            objSellTicket = await SellTicket.findOne({ _id: sell_ticket_id });
-            console.log("Sell Ticket", objSellTicket);
-            objSellTicket.products_sold.forEach(async (element) => {
-                objProduct = await Product.findById({ _id: element[0] });
-                console.log("producto = ", objProduct);
-                if (objProduct.cat_name != 'combo') {
-                    console.log("producto, cantidad, precio =", element[0], element[1], element[2])
-
-                    objStock = await StockItem.findOne({ name: objProduct.stock_name, channel: channel });
-                    console.log("stock item", objStock);
-                    consumption = element[1] * objProduct.stock_qty;
-                    console.log("consumption", consumption);
-                    objStock.quantity = objStock.quantity - consumption;
-                    console.log("Nueva Cantidad", objStock.quantity)
-                    await StockItem.findOneAndUpdate({ name: objProduct.stock_name, channel: channel }, objStock);
+            const { channel, products } = req.body;
+            for (const element of products) {
+                if (element.cat_name !== 'Combo') {
+                    console.log("sin combo", element)
+                    aDescontar = [...aDescontar, { channel: channel, name: element.stock_name, qty_to_discount: (element.stock_qty * element.quantity) }]
+                } else {
+                    console.log("CON combo", element)
+                    comboItems = await bringComboItems(element.combo_name)
+                    console.log("Combo Items", comboItems)
+                    for (let index = 0; index < comboItems.length; index++) {
+                        let x = await bringStockQty(comboItems[index].name)
+                        let multimplier = x.qty_to_discount
+                        let nameStock = x.name_to_discount
+                        aDescontar = [...aDescontar, { channel: channel, name: nameStock, qty_to_discount: (comboItems[index].quantity * element.quantity * element.stock_qty * multimplier) }]
+                    }
                 }
-                // Aqui debo descomponer el combo y repetir lo de arriba para cada elemento
-                else {
-                    objCombo = await Combo.findById({ _id: element[0] });
-                    console.log("Combo", objCombo);
-                    //     objCombo = await Combo.findOne()
-                    //     console.log("combo", objCombo)
-                };
-                res.status(201).json({ info: "Descontada venta del inventario" });
-            });
+            }
+            await discountElement(aDescontar)
+            console.log("a descontar", aDescontar)
+
+            res.status(201).json({ info: "Transferencia exitosa" });
         } catch (error) {
             res.status(500).json({ "Error Type": error.name, "Detalle": error.message });
         }
+
+        //TODO al terminar este debo revisar la definicion de codigos res.status(###)
+        // try {
+        //     const { channel, products } = req.body;
+        //     let aDescontar = []
+        //     let deCombos = []
+        //     let comboQtys = []
+        //     try {
+        //         for (const e of products) {
+        //             if ((e.cat_name) === 'Combo') {
+        //                 //let newCombo = await Combo.find({ name: e.combo_name })
+        //                 deCombos = bringComboItems(e.combo_name)
+        //                 console.log("desde el for each: deCombos =", deCombos)
+        //                 comboQtys = [...comboQtys, e.quantity]
+        //             } else {
+        //                 aDescontar = [...aDescontar, { channel: channel, stock_name: e.stock_name, qty_to_discount: e.stock_qty * e.quantity }]
+        //             }
+        //         }
+        //         console.log("deCombos ", deCombos, comboQtys)
+        //         console.log("Lo que se va a descontar sin combos", aDescontar)
+        //         deCombos.forEach((element, index) => {
+        //             aDescontar = [...aDescontar, { channel: channel, stock_name: element.name, qty_to_discount: element.quantity * comboQtys[index] }]
+        //         });
+        //     } catch (error) {
+        //         res.status(501).json({ Detalle: "No se logro desempacar la informacion de la venta" });
+        //     }
+        //     console.log(aDescontar)
+        //     //falta el fetch
+        //     res.status(201).json({ info: "Descontada venta del inventario" });
+
+        // } catch (error) {
+        //     res.status(500).json({ "Error Type": error.name, "Detalle": error.message });
+        // }
     }
 }
 

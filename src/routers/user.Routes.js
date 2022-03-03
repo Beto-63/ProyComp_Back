@@ -12,11 +12,11 @@ class UserRouter {
         //Crear rutas
         this.router.get('/users', objUserC.getAllUsers);
         this.router.get('/users/:id', objUserC.getUserById);
-        this.router.post('/users', objUserC.createUser);
-        this.router.put('/users', objUserC.updateUser);
+        this.router.post('/users', objUserC.createUser);                //
+        this.router.put('/users', objUserC.updateUser);                 //
         this.router.delete('/users', objUserC.deleteUser);
-        this.router.get('/user/cats', objUserC.getAllUserCats);
-        this.router.post('/user/byEmail', objUserC.getUserByEmail);
+        this.router.get('/user/cats', objUserC.getAllUserCats);         //
+        this.router.post('/user/byEmail', objUserC.getUserByEmail);     //
 
         //this.router.post('/users/login', objUserC.login);
 
