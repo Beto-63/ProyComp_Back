@@ -258,7 +258,7 @@ class StockController {
 
             console.log("Descontados", stockBase)
 
-            res.status(201).json({ info: "Transferencia exitosa" });
+            res.status(201).json({ info: "Los productos vendidos se han descontado del inventario" });
         } catch (error) {
             res.status(500).json({ "Error Type": error.name, "Detalle": error.message });
         }
