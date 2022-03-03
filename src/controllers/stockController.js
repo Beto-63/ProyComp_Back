@@ -1,22 +1,3 @@
-/**
- * Funciones requeridas:
- * 1. Ceracion de Stock Items                                       Probado     createItem
- * 2. Consultar todos los Items                                     Probado     getAllItems
- * 3. Consultar todos los Canales                                   Probado     getAllChannels
- * 4. Crea un canal                                                 PROBAR      createChannel
- * 5. Consulta de stockItems por Nombre (todas las ubicaciones)     Probado     getItemByName   
- * 6. Consulta de StockItems por categoria                          Probado     getItemsByCatName      
- * 7. Consulta de stockItem por nombre y por channel (ubicacion)   Probado     getItemByNameAndChannel 
- * 8. Consulta de stockItems por cat_name y por channel             FALTA       getItemByCatAndChannel
- * 9. Adicion de cantidad a stock (cantidad y ubicacion)            Probado     addQty
- *10. Ajuste de Item (excepto cantidad o cantidad/ ambos casos)     Probado     adjustItem
- *11. Traslado de cantidad de un stock item entre ubicaciones       Probado     transferQty
- *12. Consumo de Inventario (en linea / por venta) COMPLEJO             EN DEFINICION
- */
-
-
-
-
 
 //Importar Modulos
 const { findByIdAndUpdate, findOne } = require('../models/stock_item');
@@ -38,15 +19,27 @@ const bringStockQty = async (name) => {
     return { name_to_discount: obj.stock_name, qty_to_discount: obj.stock_qty }
 }
 
-const discountElement = async (arreglo) => {
-    let objStock = {}
+const discountElement = async (id, qty) => {
+    let temp = {}
+    temp = await StockItem.findByIdAndUpdate(id, { quantity: qty })
+    return temp
+}
+
+const stockElements = async (arreglo) => {
+    let stockArray = []
+    let stockArrayDiscounted = []
     let newQty = 0
     for (let index = 0; index < arreglo.length; index++) {
         const e = arreglo[index];
-        objStock = await StockItem.findOne({ channel: e.channel, name: e.name })
-        newQty = objStock.quantity - e.qty_to_discount
-        StockItem.findByIdAndUpdate({ _id: objStock._id }, { quantity: newQty })
+        stockArray[index] = await StockItem.findOne({ channel: e.channel, name: e.name })
     }
+    for (let index = 0; index < stockArray.length; index++) {
+        const element = stockArray[index];
+        newQty = element.quantity - arreglo[index].qty_to_discount
+        console.log("Cantidad nueva", newQty)
+        stockArrayDiscounted[index] = await discountElement(element._id, newQty)
+    }
+    return stockArrayDiscounted
 
 }
 class StockController {
@@ -61,7 +54,6 @@ class StockController {
             res.status(500).json({ "Error Type": error.name, "Detalle": error.message });
         }
     };
-
 
     getAllItems = async (req, res) => {
         try {
@@ -129,7 +121,6 @@ class StockController {
         };
     }
 
-
     getItemsByName = async (req, res) => {
         try {
             let { name } = req.body;
@@ -162,8 +153,6 @@ class StockController {
             res.status(500).json({ "Error Type": error.name, "Detalle": error.message });
         };
     }
-
-
 
     getItemByNameAndChannel = async (req, res) => {
         try {
@@ -231,6 +220,8 @@ class StockController {
         console.log("lo que llega ", req.body)
         let comboItems = []
         let aDescontar = []
+        let aDescontarFinal = []
+        let stockBase = []
         try {
             const { channel, products } = req.body;
             for (const element of products) {
@@ -249,56 +240,29 @@ class StockController {
                     }
                 }
             }
-            await discountElement(aDescontar)
             console.log("a descontar", aDescontar)
+            for (let index = 0; index < aDescontar.length; index++) {
+                const element1 = aDescontar[index];
+                for (let index2 = index + 1; index2 < aDescontar.length; index2++) {
+                    const element2 = aDescontar[index2];
+                    if (element1.name === element2.name) {
+                        element1.qty_to_discount = element1.qty_to_discount + element2.qty_to_discount
+                        aDescontar.splice(index2, index2)
+                    }
+                }
+                aDescontarFinal[index] = element1
+            }
+            console.log("a descontar Final", aDescontarFinal)
+            // en a descontar YA TENGO CONTROLADO LO QUE NECESITO DECONTAR DE la coleccion Stock Items
+            stockBase = await stockElements(aDescontar)
+
+            console.log("Descontados", stockBase)
 
             res.status(201).json({ info: "Transferencia exitosa" });
         } catch (error) {
             res.status(500).json({ "Error Type": error.name, "Detalle": error.message });
         }
-
-        //TODO al terminar este debo revisar la definicion de codigos res.status(###)
-        // try {
-        //     const { channel, products } = req.body;
-        //     let aDescontar = []
-        //     let deCombos = []
-        //     let comboQtys = []
-        //     try {
-        //         for (const e of products) {
-        //             if ((e.cat_name) === 'Combo') {
-        //                 //let newCombo = await Combo.find({ name: e.combo_name })
-        //                 deCombos = bringComboItems(e.combo_name)
-        //                 console.log("desde el for each: deCombos =", deCombos)
-        //                 comboQtys = [...comboQtys, e.quantity]
-        //             } else {
-        //                 aDescontar = [...aDescontar, { channel: channel, stock_name: e.stock_name, qty_to_discount: e.stock_qty * e.quantity }]
-        //             }
-        //         }
-        //         console.log("deCombos ", deCombos, comboQtys)
-        //         console.log("Lo que se va a descontar sin combos", aDescontar)
-        //         deCombos.forEach((element, index) => {
-        //             aDescontar = [...aDescontar, { channel: channel, stock_name: element.name, qty_to_discount: element.quantity * comboQtys[index] }]
-        //         });
-        //     } catch (error) {
-        //         res.status(501).json({ Detalle: "No se logro desempacar la informacion de la venta" });
-        //     }
-        //     console.log(aDescontar)
-        //     //falta el fetch
-        //     res.status(201).json({ info: "Descontada venta del inventario" });
-
-        // } catch (error) {
-        //     res.status(500).json({ "Error Type": error.name, "Detalle": error.message });
-        // }
     }
 }
-
-/**
-         * Aun no se si hacerlos para ser corrido en el 
-         * cierre o si debe ser corrido en cada venta
-         * Esta version seria para cada venta
-         */
-
-
-
 
 module.exports = StockController;   
