@@ -29,7 +29,7 @@ class UserController {
 
             // Si el id no se encuentra en DB y la consulta es vacia
             if (user == null) {
-                return res.status(404).json({ message: 'Usuario no encontrada' });
+                return res.status(400).json({ message: 'Usuario no encontrada' });
             }
 
             return res.status(200).json(user);
@@ -47,7 +47,7 @@ class UserController {
             const user = await User.findOne({ email: email })
             // Si el corrreo no se encuentra en DB y la consulta es vacia
             if (user == null) {
-                return res.status(404).json({ message: 'Usuario no encontrada' });
+                return res.status(400).json({ message: 'Usuario no encontrada' });
             }
             console.log(user)
             return res.status(200).json(user);
@@ -68,11 +68,11 @@ class UserController {
             // Validar si el usuario ya existe, antes de guardar
             const nameFound = await User.findOne({ name: name });
             if (nameFound) {
-                return res.status(404).json({ message: 'Este nombre ya existe' });
+                return res.status(400).json({ message: 'Este nombre ya existe' });
             }
             const emailFound = await User.findOne({ email: email });
             if (emailFound) {
-                return res.status(404).json({ message: 'El email ya existe' });
+                return res.status(400).json({ message: 'El email ya existe' });
             }
 
             // encriptando la contraseña
@@ -134,7 +134,7 @@ class UserController {
 
         } catch (error) {
             //TODO Validar con Andres esta respuesta, yo creeria que es 500
-            return res.status(401).json({ message: 'Error al hacer register', error });
+            return res.status(500).json({ message: 'Error al hacer register', error });
         }
 
     }
@@ -150,7 +150,7 @@ class UserController {
             // Se valida si existe un suario con este id
             const response = await User.findById(id);
             if (response == null) {
-                return res.status(404).json({ message: 'Usuario no encontrado para editar' });
+                return res.status(400).json({ message: 'Usuario no encontrado para editar' });
             }
 
             // // encriptando la contraseña
@@ -225,7 +225,7 @@ class UserController {
 
             // Si el id no se encuentra en DB y la consulta es vacia
             if (updatedUser == null) {
-                return res.status(404).json({ message: 'Usuario no encontrado' });
+                return res.status(400).json({ message: 'Usuario no encontrado' });
             }
 
 
@@ -233,7 +233,7 @@ class UserController {
 
         } catch (error) {
             //TODO Validar con Andres esta respuesta, yo creeria que es 500
-            return res.status(401).json({ message: 'Error al hacer updateUser', error });
+            return res.status(500).json({ message: 'Error al hacer updateUser', error });
         }
 
     }

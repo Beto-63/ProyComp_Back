@@ -162,7 +162,7 @@ class StockController {
             if (data.status == 1) {
                 res.status(200).json(data);
             } else {
-                res.status(404).json({ Error: "El item del stock esta inactivo" })
+                res.status(400).json({ Error: "El item del stock esta inactivo" })
             }
         } catch (error) {
             res.status(500).json({ "Error Type": error.name, "Detalle": error.message });
@@ -189,7 +189,7 @@ class StockController {
                 await StockItem.findByIdAndUpdate({ _id: data.id }, data);
                 res.status(201).json({ info: "Actualizacion exitosa" });
             } else {
-                res.status(404).json({ Error: "El item del stock esta inactivo" })
+                res.status(400).json({ Error: "El item del stock esta inactivo" })
             }
         } catch (error) {
             res.status(500).json({ "Error Type": error.name, "Detalle": error.message });
@@ -209,7 +209,7 @@ class StockController {
                 await StockItem.findOneAndUpdate({ _id: data2._id }, data2);
                 res.status(201).json({ info: "Transferencia exitosa" });
             } else {
-                res.status(404).json({ Error: "El item del stock esta inactivo" })
+                res.status(400).json({ Error: "El item del stock esta inactivo" })
             }
         } catch (error) {
             res.status(500).json({ "Error Type": error.name, "Detalle": error.message });
