@@ -63,9 +63,15 @@
 
 - Codigos de respuesta HTTP de la API:
 
-    200: Consulta exitosa
-    201: Crear o editar un registro existoso
-    400: Consulta no exitosa
-    401: Acceso no autorizado
-    403: Forbidden - no tiene derechos de acceso al contenido
-    500: Error en el try / catch
+    Middleware
+
+    401 - Acceso no autorizado
+    404 - no user found
+    403 - Forbidden - no tiene derechos de acceso a esta ruta
+
+    Controllers
+
+    200 - mostrar información
+    201 - recurso creado
+    500 - consulta fallida, Error en el try / catch
+    400 - bad request (peticion o consulta inconsistente)

@@ -198,7 +198,7 @@ class AuthController {
             //console.log('token '+token)
 
             if (!token) { // Sino existe el token
-                return res.status(403).json({ message: 'No token provided (logout)' });
+                return res.status(401).json({ message: 'No token provided (logout)' });
             }
 
             const tokenFound = await session_tokenModel.findOne({ token: token });

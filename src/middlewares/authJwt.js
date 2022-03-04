@@ -59,7 +59,7 @@ const verifyToken = async (req, res, next) => { // Es una funcion intermedia
         //console.log(user);
 
         if(!user){ // Si el usuario no existe
-            return res.status(400).json({message: 'No user found'});
+            return res.status(404).json({message: 'No user found'});
         }else{// Si el usuario existe, se buscan los roles
 
             //console.log('token valido y el usuario existe');
